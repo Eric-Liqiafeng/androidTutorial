@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/goToSubActivityBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go to Sub Activity Button" />
+
+    <Button
+        android:id="@+id/intentAlarmBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="open alarm" />
+
+    <Button
+        android:id="@+id/intentOpenMusicBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="open music" />
+
+    <Button
+        android:id="@+id/intentCustomBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Custom Activity" />
+</LinearLayout>
