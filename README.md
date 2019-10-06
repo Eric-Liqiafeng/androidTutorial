@@ -282,11 +282,64 @@ public void onRestoreInstanceState(Bundle savedInstanceState) {
 ##### Starting one activity from another
 一个activity通常需要启动另一个activity，如果当app需要从当前屏幕移动到一个新的activity。
 取决于你的activity想不想新的activity有返回结果，你的启动activity的方法可以非为两个 startActivity()或者startActivityForResult()。在这两种情况下，你传递的都是Intent 对象。
+Intent 对象描述了你想启动的activity或者描述了你想启动activity的类型(系统选择当前app或者甚至是不同app中的适当的应用)。Intent对象也可以传递一些少量的数据用来给activity启动使用，想了解更多的关于Intent 类，请参考[ Intents and Intent Filters](https://developer.android.google.cn/guide/components/intents-filters.html)。
+ 
+ ###### startActivity()
+如果你启动一个新的activity不需要返回结果，你可以调用startActivity()方法。
+当你在自己的app内，你经常需要简单地启动你知道的activity。例如下面代码显示了如何启动一个称为 SignActivity的activity。
+```java
+Intent intent = new Intent(this, SignInActivity.class);
+startActivity(intent);
+```
+您的应用程序可能也要从您的活动执行一些操作,如发送电子邮件,短信,或状态更新,使用数据。在这种情况下,您的应用程序可能没有自己的活动来执行这样的行为,所以你可以利用活动提供的其他应用程序在设备上,它可以执行的操作。这是意图很有价值的地方:您可以创建一个意图描述你要执行的操作和系统启动适当的活动从另一个应用程序。如果有多个活动,可以处理的目的,然后,用户可以选择使用哪一个。例如,如果您想允许用户发送一封电子邮件,您可以创建以下Intent:
+```java
+Intent intent = new Intent(Intent.ACTION_SEND);
+intent.putExtra(Intent.EXTRA_EMAIL, recipientArray);
+startActivity(intent);
+```
+EXTRA_EMAIL额外添加到意图是一个字符串数组的电子邮件应该发送电子邮件地址。当一个电子邮件应用程序响应这个意图,它读取字符串数组中提供额外的和地方的”到“电子邮件领域组成形式。在这种情况下,电子邮件应用程序的活动开始,当用户完成时,resumes你的activity。
+###### startActivityForResult()
+有些时候，你需要从一个activity中得到返回结果。
+例如,你可能会开始一个activity,让用户在一个联系人列表中选择一个人;当它结束时,它将返回被选中的人。要做到这一点,您调用startActivityForResult(Intent,int)方法,在整数参数标识返回结果的回调，用来区分一个activity中多个startActivityForResult(Intent, int)的响应逻辑。它不是全局标识符，不会与其他的app或者activity起冲突。返回来的结果的回调方法是onActivityResult(int,int,Intent)。
+当一个子activity退出时，它可以调用setResult(int)去返回数据给父activity。子活动活动必须提供一个结果代码,可以是标准的返回结果RESULT_CANCELED,RESULT_OK，或者是从RESULT_FIRST_USER 开始的任何自定义值。此外，子activity可以包含任何数据的Intent 对象。父activity使用 onActivityResult(int,int,Intent)方法通过父活动提供的整数标识符来接收信息。
+如果子activity因为任何原因失败了，比如说崩溃了，父activity会接收到代码 RESULT_CANCELED。
+```java
+public class MyActivity extends Activity {
+     // ...
 
+     static final int PICK_CONTACT_REQUEST = 0;
 
+     public boolean onKeyDown(int keyCode, KeyEvent event) {
+         if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+             // When the user center presses, let them pick a contact.
+             startActivityForResult(
+                 new Intent(Intent.ACTION_PICK,
+                 new Uri("content://contacts")),
+                 PICK_CONTACT_REQUEST);
+            return true;
+         }
+         return false;
+     }
 
-
-
+     protected void onActivityResult(int requestCode, int resultCode,
+             Intent data) {
+         if (requestCode == PICK_CONTACT_REQUEST) {
+             if (resultCode == RESULT_OK) {
+                 // A contact was picked.  Here we will just display it
+                 // to the user.
+                 startActivity(new Intent(Intent.ACTION_VIEW, data));
+             }
+         }
+     }
+ }
+```
+###### Coordinating activities
+当一个activity启动另一个activity的时候，他们都经历activity的转换。当另一个activity创建的时候，第一个activity进入Paused 或者 Stopped 状态。当这些activity保存共享数据到磁盘或者其他地方的时候，理解下面的很重要，并不是第一个activity完全stopped之后才创建第二个activity。相反，是在启动第二个activity的过程中停止第一个activity。
+lifecycle 回调的顺序需要好好的定义，尤其是当两个activities在同一个app内，并且由由一个启动另外一个的时候。下面是activity A启动activity B 时的操作顺序：
+  - 1.activity A 的onPause() 方法执行。
+  - 2.activity B 的onCreate()，onStart() 和onResume() 方法执行，现在 activity B 是用户 focus的了。
+  - 3. 然后 activity A 已经在屏幕上不可见了，它的onStop() 方法执行。
+  这个预测的生命周期的顺序允许你管理从一个activity到另一个activity的信息转换。
 
 
 
