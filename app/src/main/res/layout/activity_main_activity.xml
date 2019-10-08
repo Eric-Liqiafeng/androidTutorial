@@ -26,4 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SingleInstance Button" />
+
+    <Button
+        android:id="@+id/lifecycleComponentActivityBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lifecycle Component" />
 </LinearLayout>

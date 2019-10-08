@@ -15,6 +15,7 @@ public class ActivityMainActivity extends AppCompatActivity {
     private Button singleTopActivityBtn;
     private Button singleTaskActivityBtn;
     private Button singleInstanceActivityBtn;
+    private Button lifecycleComponentActivityBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +43,12 @@ public class ActivityMainActivity extends AppCompatActivity {
         singleInstanceActivityBtn = findViewById(R.id.singleInstanceActivityBtn);
         singleInstanceActivityBtn.setOnClickListener(v->{
             Intent intent = new Intent(ActivityMainActivity.this, SingleInstanceActivity.class);
+            startActivity(intent);
+        });
+
+        lifecycleComponentActivityBtn = findViewById(R.id.lifecycleComponentActivityBtn);
+        lifecycleComponentActivityBtn.setOnClickListener(v->{
+            Intent intent = new Intent(ActivityMainActivity.this, LifecycleComponentActivity.class);
             startActivity(intent);
         });
 

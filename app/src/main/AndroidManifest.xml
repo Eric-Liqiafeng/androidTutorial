@@ -31,6 +31,7 @@
         <activity android:name=".activity.SingleTopActivity" android:launchMode="singleTop"/>
         <activity android:name=".activity.SingleTaskActivity" android:launchMode="singleTask"/>
         <activity android:name=".activity.SingleInstanceActivity" android:launchMode="singleInstance"/>
+        <activity android:name=".activity.LifecycleComponentActivity" android:launchMode="standard"/>
 
         <activity android:name=".service.ServiceMainActivity"></activity>
 
