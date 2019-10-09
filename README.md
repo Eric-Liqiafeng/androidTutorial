@@ -930,6 +930,90 @@ RSSPullService.enqueueWork(getContext(), RSSPullService.class, RSS_JOB_ID, servi
 调用enqueueWork（）后，JobIntentService将执行其onHandleWork（）方法中定义的工作，然后自行停止。
 下一步是将工作请求的结果发送回原来的Activity或Fragment。下一课将向您展示如何使用[BroadcastReceiver](https://developer.android.google.cn/reference/android/content/BroadcastReceiver.html)进行此操作。
 ## Report work status(需要先看BroadcastReceiver)
+本指南向您展示如何在后台service中向发送请求的组件报告工作请求的状态。 例如，这使您可以在Activity对象的UI中报告请求的状态。 建议的发送和接收状态的方法是使用LocalBroadcastManager，它将broadcast Intent对象限制为您自己的应用程序中的组件。
+
+### Report status from a JobIntentService
+要将JobIntentService中的工作请求状态发送给其他组件，请首先创建一个在其扩展数据中包含该状态的Intent。 作为一种选择，您可以向该Intent添加操作和数据URI。
+
+接下来，通过调用LocalBroadcastManager.sendBroadcast()发送Intent。 这会将Intent发送到应用程序中已注册接收它的任何组件。 要获取LocalBroadcastManager的实例，请调用getInstance()。
+例子：
+```java
+public final class Constants {
+    ...
+    // Defines a custom Intent action
+    public static final String BROADCAST_ACTION =
+        "com.example.android.threadsample.BROADCAST";
+    ...
+    // Defines the key for the status "extra" in an Intent
+    public static final String EXTENDED_DATA_STATUS =
+        "com.example.android.threadsample.STATUS";
+    ...
+}
+public class RSSPullService extends JobIntentService {
+...
+    /*
+     * Creates a new Intent containing a Uri object
+     * BROADCAST_ACTION is a custom Intent action
+     */
+    Intent localIntent =
+            new Intent(Constants.BROADCAST_ACTION)
+            // Puts the status into the Intent
+            .putExtra(Constants.EXTENDED_DATA_STATUS, status);
+    // Broadcasts the Intent to receivers in this app.
+    LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+...
+}
+```
+下一步是处理发送原始工作请求的组件中的传入broadcast Intent对象。
+
+### Receive status broadcasts from a JobIntentService
+若要接收broadcast Intent对象，请使用BroadcastReceiver的子类。 在子类中，实现BroadcastBceivecast.onReceive()回调方法，LocalBroadcastManager在收到Intent时将调用该方法。 LocalBroadcastManager将传入的Intent传递给BroadcastReceiver.onReceive()。  
+例子：
+```java
+// Broadcast receiver for receiving status updates from the IntentService.
+private class DownloadStateReceiver extends BroadcastReceiver
+{
+    // Called when the BroadcastReceiver gets an Intent it's registered to receive
+    @Override
+    public void onReceive(Context context, Intent intent) {
+...
+        /*
+         * Handle Intents here.
+         */
+...
+    }
+}
+```
+
+定义了BroadcastReceiver之后，您可以为其定义与特定操作，类别和数据匹配的filter。 为此，创建一个IntentFilter。 第一个片段显示了如何定义过滤器：
+```java
+// Class that displays photos
+public class DisplayActivity extends FragmentActivity {
+    ...
+    public void onCreate(Bundle stateBundle) {
+        ...
+        super.onCreate(stateBundle);
+        ...
+        // The filter's action is BROADCAST_ACTION
+        IntentFilter statusIntentFilter = new IntentFilter(
+                Constants.BROADCAST_ACTION);
+
+        // Adds a data filter for the HTTP scheme
+        statusIntentFilter.addDataScheme("http");
+        ...
+```
+要向系统注册BroadcastReceiver和IntentFilter，请获取LocalBroadcastManager的实例并调用其registerReceiver()方法。 下一个代码片段显示如何注册BroadcastReceiver及其创建 IntentFilter：
+```java
+        // Instantiates a new DownloadStateReceiver
+        DownloadStateReceiver downloadStateReceiver =
+                new DownloadStateReceiver();
+        // Registers the DownloadStateReceiver and its intent filters
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                downloadStateReceiver,
+                statusIntentFilter);
+        ...
+```
+发送broadcast Intent不会启动或恢复activity。 即使您的应用程序在后台，Activity的BroadcastReceiver也会接收和处理Intent对象，但不会强制您的应用程序进入前台。 如果您想通知用户有关您的应用不可见的后台发生的事件，请使用[Notification](https://developer.android.google.cn/reference/android/app/Notification.html)。 切勿启动activity来响应传入的broadcast Intent。
 
 ## Bound services
 绑定service是client-server 接口中的server端。 它允许组件（例如activity）绑定到service，发送请求，接收响应以及执行进程间通信（IPC）。 绑定service通常仅在服务(绑定)另一个应用程序组件时才存在，并且不会无限期地在后台运行。
