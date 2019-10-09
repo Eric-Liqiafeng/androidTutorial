@@ -1285,21 +1285,203 @@ bindService(intent, connection, Context.BIND_AUTO_CREATE);
 有关已启动service的生命周期的更多信息，请参阅[Service](https://developer.android.google.cn/guide/components/services.html#Lifecycle)文档。
 
 # Broadcast
+Android应用程序可以从Android系统和其他Android应用程序发送或接收broadcast消息，类似于发布-订阅设计模式。当感兴趣的事件发生时，将发送这些broadcast。例如，Android系统会在发生各种系统事件（例如系统启动或设备开始充电）时发送broadcast。应用程序还可以发送自定义broadcast，例如，以向其他应用程序通知他们可能感兴趣的内容（例如，已下载一些新数据）。
 
+应用可以注册以接收特定的broadcast。发送broadcast后，系统会自动将broadcast路由到已订阅接收特定broadcast类型的应用。
 
+一般来说，broadcast可用作跨应用程序和普通用户流之外的消息传递系统。但是，您必须小心，不要滥用机会在后台响应broadcast和运行作业，这可能会导致系统性能下降，如以下视频所述。
+## About system broadcasts
+当发生各种系统事件（例如，系统切换为飞行模式或从飞行模式退出）时，系统会自动发送broadcast。 系统broadcast将发送到已订阅接收事件的所有应用。
 
+broadcast消息本身包装在一个Intent对象中，该对象的操作字符串标识发生的事件（例如android.intent.action.AIRPLANE_MODE）。 该Intent还可以包括extra 字段中的其他信息。 例如，飞行模式Intent包括布尔附加值，该布尔值指示飞行模式是否打开。 
 
+有关如何读取Intent并从Intent中获取操作字符串的更多信息，请看[Intents and Intent Filter](https://developer.android.google.cn/guide/components/intents-filters.html).
 
+有关系统broadcast操作的完整列表，请参阅Android SDK中的BROADCAST_ACTIONS.TXT文件。 每个broadcast动作都有一个与之关联的常数字段。 例如，常量ACTION_AIRPLANE_MODE_CHANGED的值为android.intent.action.AIRPLANE_MODE。 每个broadcast操作的文档都可以在其关联的常量字段中找到。
 
+### Changes to system broadcasts
+随着Android平台的发展，它会定期更改系统broadcast的行为。 如果您的应用定位到Android 7.0（API level 24）或更高版本，或者安装在运行Android 7.0或更高版本的设备上，请记住以下更改。
+- Android 9  
+从Android 9（API级别28）开始，NETWORK_STATE_CHANGED_ACTION广播不会接收到有关用户位置或个人身份数据的信息。  
+此外，如果您的应用安装在运行Android 9或更高版本的设备上，则来自Wi-Fi的系统广播不包含SSID，BSSID，连接信息或扫描结果。 要获取此信息，请调用getConnectionInfo()。
+- Android 8.0  
+从Android 8.0（API级别26）开始，系统对manifest声明的接收者施加了其他限制。  
+如果您的应用程序针对Android 8.0或更高版本，则您不能使用清单为大多数隐式broadcast（不专门针对您的应用程序的broadcast）声明接收方。 当用户积极使用您的应用时，您仍然可以使用上下文注册的接收器。
+- Android 7  
+Android 7.0（API级别24）及更高版本不会发送以下系统broadcast：
+  - ACTION_NEW_PICTURE
+  - ACTION_NEW_VIDEO
+另外，定位到Android 7.0及更高版本的应用必须使用registerReceiver（BroadcastReceiver，IntentFilter）注册CONNECTIVITY_ACTION broadcast。 在清单中声明接收者无效。
 
+## Receiving broadcasts
+应用可以通过两种方式接收broadcast：通过清单声明的receivers和上下文注册的receivers.
+### Manifest-declared receivers
+如果您在清单中声明了broadcastreceiver ，则在发送broadcast时，系统会启动您的应用程序（如果该应用程序尚未运行）。
+- Note: 
+如果您的应用程序的目标是API级别26或更高级别，则除少数一些不受此限制的隐式broadcast外，您不能使用manifest为隐式broadcast（不专门针对您的应用的broadcast）声明接收方。 在大多数情况下，您可以使用scheduled jobs。
+要在manifest中声明广播接收器，请执行以下步骤：
+1. 在您的应用manifest中指定<receiver>元素。
+```xml
+<receiver android:name=".MyBroadcastReceiver"  android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+        <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+    </intent-filter>
+</receiver>
+```
+Intent filter指定receiver订阅的broadcast操作。
+```java
+public class MyBroadcastReceiver extends BroadcastReceiver {
+        private static final String TAG = "MyBroadcastReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Action: " + intent.getAction() + "\n");
+            sb.append("URI: " + intent.toUri(Intent.URI_INTENT_SCHEME).toString() + "\n");
+            String log = sb.toString();
+            Log.d(TAG, log);
+            Toast.makeText(context, log, Toast.LENGTH_LONG).show();
+        }
+    }
+```
+安装应用程序后，系统软件包管理器将注册receiver 。 然后，receiver 将成为您应用程序的单独入口点，这意味着系统可以启动应用程序并在应用程序当前未运行时传送broadcast。
 
+系统创建一个新的BroadcastReceiver组件对象，以处理其接收的每个broadcast。 该对象仅在对onReceive（Context，Intent）的调用期间有效。 一旦您的代码从该方法返回，系统就会认为该组件不再处于活动状态。
 
+### Context-registered receivers
+要向上下文注册receiver ，请执行以下步骤：
+1. 创建一个BroadcastReceiver实例
+```java
+BroadcastReceiver br = new MyBroadcastReceiver();
+```
+2. 创建一个 IntentFilter并且通过调用registerReceiver(BroadcastReceiver,IntentFilter)注册receiver:
+```java
+IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+    filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+    this.registerReceiver(br, filter);
+```
+- Note:
+要注册local broadcasts, 请改为调用[LocalBroadcastManager.registerReceiver(BroadcastReceiver, IntentFilter)](https://developer.android.google.cn/reference/androidx/localbroadcastmanager/content/LocalBroadcastManager.html#registerReceiver(android.content.BroadcastReceiver,%20android.content.IntentFilter))。
+上下文注册的receiver 只要其注册上下文有效就可以接收broadcast。 例如，如果您在Activity上下文中注册，则只要该活动未销毁，您就会收到broadcast。 如果您在“应用程序”上下文中注册，则只要该应用程序正在运行，您就会收到broadcast。
+3.要停止接收broadcast，请调用unregisterReceiver(android.content.BroadcastReceiver)。 当您不再需要receiver 或上下文不再有效时，请确保注销它。
 
+请注意在何处注册和注销receiver ，例如，如果使用活动的上下文在onCreate(Bundle)中注册了receiver ，则应在onDestroy()中将其注销，以防止receiver 泄漏出活动上下文。 如果在onResume()中注册了receiver ，则应在onPause()中将其注销，以防止多次注册(如果您不想在暂停时接收broadcast，这样可以减少不必要的系统开销)。 不要在onSaveInstanceState(Bundle)中注销，因为如果用户移回历history stack，则不会调用此方法。
+### Effects on process state
+BroadcastReceiver的状态(无论它是否正在运行)会影响其包含进程的状态，进而会影响其被系统杀死的可能性。 例如，当某个进程执行接收方时(即当前正在其onReceive()方法中运行代码)，则该进程被视为前台进程。 该系统使进程保持运行，除非在内存压力过大的情况下。
 
+但是，一旦您的代码从onReceive()返回，BroadcastReceiver将不再处于活动状态。 接收方的宿主进程仅与其中运行的其他应用程序组件一样重要。 如果该进程仅托管一个manifest 声明的接收方(用户从未与之交互或最近未与之交互的应用程序的常见情况)，则从onReceive()返回后，系统会认为其进程为低优先级进程，并且可能 杀死它以使资源可用于其他更重要的过程。
 
+因此，您不应从broadcast receiver启动长时间运行的后台线程。 在onReceive()之后，系统可以随时终止进程以回收内存，这样做可以终止在进程中运行的生成线程。 为了避免这种情况，您应该调用goAsync()(如果您需要更多时间在后台线程中处理broadcast)，或者使用JobScheduler从接收方安排JobService，以便系统知道该进程继续执行活动 工作。 有关更多信息，请参见[Processes and Application Life Cycle](https://developer.android.google.cn/guide/topics/processes/process-lifecycle.html)。
 
+以下代码片段显示了一个broadcast receiver ，该broadcast receiver 使用goAsync()标记onReceive()完成后需要更多时间才能完成。 如果您要在onReceive()中完成的工作太长而导致UI线程丢失一帧(> 16ms)，这使其特别适合于后台线程。。
+```java
+public class MyBroadcastReceiver extends BroadcastReceiver {
+    private static final String TAG = "MyBroadcastReceiver";
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        final PendingResult pendingResult = goAsync();
+        Task asyncTask = new Task(pendingResult, intent);
+        asyncTask.execute();
+    }
 
+    private static class Task extends AsyncTask<String, Integer, String> {
+
+        private final PendingResult pendingResult;
+        private final Intent intent;
+
+        private Task(PendingResult pendingResult, Intent intent) {
+            this.pendingResult = pendingResult;
+            this.intent = intent;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Action: " + intent.getAction() + "\n");
+            sb.append("URI: " + intent.toUri(Intent.URI_INTENT_SCHEME).toString() + "\n");
+            String log = sb.toString();
+            Log.d(TAG, log);
+            return log;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            // Must call finish() so the BroadcastReceiver can be recycled.
+            pendingResult.finish();
+        }
+    }
+}
+```
+## Sending broadcasts
+Android为应用程序提供了三种发送broadcast的方式：
+- sendOrderedBroadcast(Intent，String)方法一次将broadcast发送到一个receiver 。 当每个receiver 轮流执行时，它可以将结果传播到下一个receiver ，或者可以完全中止broadcast，从而不会将其传递给其他receiver 。 可以使用匹配的intent-filter的android：priority属性控制receiver 的运行顺序； 具有相同优先级的receiver 将以任意顺序运行。
+- sendBroadcast(Intent)方法以不确定的顺序将广播发送到所有receiver 。 这称为正常广播。 这更有效，但是意味着receiver 无法读取其他receiver 的结果，传播从广播接收的数据或中止广播。
+- LocalBroadcastManager.sendBroadcast方法将broadcast发送到与发送者在同一应用程序中的receiver 。 如果不需要跨应用程序发送broadcast，请使用 local broadcast。 实施效率更高(无需进程间通信)，您无需担心与其他应用程序能够接收或发送broadcast有关的任何安全问题。
+
+以下代码段演示了如何通过创建Intent并调用sendBroadcast(Intent)来发送broadcast.
+```java
+Intent intent = new Intent();
+intent.setAction("com.example.broadcast.MY_NOTIFICATION");
+intent.putExtra("data","Notice me senpai!");
+sendBroadcast(intent);
+```
+broadcast消息包装在Intent对象中。 意向的操作字符串必须提供应用程序的Java包名称语法，并唯一标识broadcast事件。 您可以使用putExtra(String，Bundle)将其他信息附加到Intent。 您还可以通过调用该Intent上的setPackage(String)将broadcast限制为同一组织中的一组应用程序。
+- Note:
+尽管使用startActivity(Intent)将Intent用于发送broadcast和启动activity，但是这些动作是完全无关的。 broadcast receiver看不到或捕获用于启动 activity的Intent； 同样，当您broadcast Intent时，您将找不到或启动activity。
+## Restricting broadcasts with permissions
+permissions 允许您将broadcast限制为拥有某些权限的应用程序集。 您可以对broadcast的sender或receiver 实施限制.
+### Sending with permissions
+当您调用sendBroadcast(Intent，String)或sendOrderedBroadcast(Intent，String，BroadcastReceiver，Handler，int，String，Bundle)时，您可以指定一个权限参数。 只有请求了manifest中带有标签的许可的receiver (如果危险则随后被授予许可)才能接收broadcast。 例如，以下代码发送broadcast：
+```java
+sendBroadcast(new Intent("com.example.NOTIFY"),
+              Manifest.permission.SEND_SMS);
+```
+要接收boradcast，接收应用必须请求权限，如下所示：
+```xml
+<uses-permission android:name="android.permission.SEND_SMS"/>
+```
+您可以指定现有的系统权限（例如SEND_SMS），也可以使用<permission>元素定义自定义权限。 有关一般权限和安全性的信息，请看 [System Permissions](https://developer.android.google.cn/guide/topics/security/permissions.html).
+- Note:  
+安装应用程序后，将注册自定义权限。 定义自定义权限的应用程序必须在使用它的应用程序之前安装。
+### Receiving with permissions
+如果您在注册broadcast接收器时指定了权限参数（无论是使用registerReceiver（BroadcastReceiver，IntentFilter，String，Handler）还是在manifest中的<receiver>标记中标记），则只有在manifest使用<uses-permission>请求许可的broadcast者 （如果有危险，则随后被授予许可？）可以将Intent发送给接收者。
+例如，假设您的接收应用程序具有声明manifest的receiver，如下所示：
+```xml
+<receiver android:name=".MyBroadcastReceiver"
+          android:permission="android.permission.SEND_SMS">
+    <intent-filter>
+        <action android:name="android.intent.action.AIRPLANE_MODE"/>
+    </intent-filter>
+</receiver>
+```
+或者您的接收应用程序具有上下文注册的receiver，如下所示：
+```java
+IntentFilter filter = new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+registerReceiver(receiver, filter, Manifest.permission.SEND_SMS, null );
+```
+然后，为了能够向这些receiver 发送broadcast，发送应用必须请求权限，如下所示：
+```xml
+<uses-permission android:name="android.permission.SEND_SMS"/>
+```
+## Security considerations and best practices
+以下是发送和接收broadcast的一些安全注意事项和最佳做法：
+- 如果您不需要将broadcast发送到应用程序外部的组件，请使用支持库中的LocalBroadcastManager发送和接收本地broadcast。 LocalBroadcastManager效率更高（无需进程间通信），使您可以避免考虑与其他能够接收或发送broadcast的应用程序有关的安全问题。 local broadcast可用作应用程序中的通用发布/订阅事件总线，而不会产生系统范围broadcast的任何开销。
+- 如果许多应用程序已经注册接收manifest中的同一broadcast，则可能导致系统启动许多应用程序，从而对设备性能和用户体验产生重大影响。 为了避免这种情况，宁愿使用上下文注册而不是manifest声明。 有时，Android系统本身会强制使用上下文注册的接收器。 例如，CONNECTIVITY_ACTION broadcast仅传递给上下文注册的接收器。
+- 不要使用隐式Intent broadcast敏感信息。 任何注册接收broadcast的应用都可以读取该信息。 有三种方法可以控制谁可以接收您的broadcast：
+  - 您可以在发送broadcast时指定权限。
+  - 在Android 4.0及更高版本中，您可以在发送broadcast时使用setPackage（String）指定一个程序包。 系统将broadcast限制为与软件包匹配的一组应用程序。
+  - 你可以使用LocalBroadcastManager 发送本地broadcast。
+- 当您注册receiver 时，任何应用都可以将潜在的恶意broadcast发送到您的应用的receiver 。 有三种方法可以限制您的应用接收的broadcast
+  - 您可以在注册broadcast recevier时指定权限
+  - 对于manifest声明的receiver，可以在manifest中将android：exported属性设置为"false"。 receiver不会从应用程序外部的源接收broadcast。
+  - 您可以使用LocalBroadcastManager将自己限制为仅local broadcast.
+- broadcast action的名称空间是全局的。 确保将动作名称和其他字符串写在您拥有的名称空间中，否则可能会无意间与其他应用冲突
+- 因为receiver 的onReceive(Context，Intent)方法在主线程上运行，所以它应该执行并快速返回。 如果您需要执行长时间运行的工作，请小心生成线程或启动后台服务，因为在onReceive()返回之后，系统可能会杀死整个进程。 有关更多信息，请参见[Effect on process state](https://developer.android.google.cn/guide/components/broadcasts#effects-on-process-state)。要执行长期运行的工作，我们建议：
+  - 在receiver 的onReceive()方法中调用goAsync()，并将BroadcastReceiver.PendingResult传递给后台线程。 从onReceive()返回后，这可使broadcast保持活动状态。 但是，即使采用这种方法，系统也希望您能够非常快地完成broadcast(不到10秒)。 它的确使您可以将工作移至另一个线程，以避免使主线程出现故障。
+  - 使用 JobScheduler,详情请看[Inteligent Job Scheduling](https://developer.android.google.cn/topic/performance/scheduling.html).
+- 不要在broadcast receiver中启动activity，因为这回使得用户体验很差，尤其是有多个broadcast receiver的时候。这种时候，请考虑使用[notification](https://developer.android.google.cn/guide/topics/ui/notifiers/notifications.html)。
 
 
 
