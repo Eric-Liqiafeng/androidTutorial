@@ -38,6 +38,15 @@ public class MyForegroundMusicService extends Service {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        mediaPlayer = null;
+        Log.d(this.getClass().getName(), "onDestroy: ");
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -46,6 +55,10 @@ public class MyForegroundMusicService extends Service {
 
 
     public class MyMusicBinder extends Binder {
+
+        public Service getService(){
+            return MyForegroundMusicService.this;
+        }
 
         public boolean isPlaying() {
             return mediaPlayer.isPlaying();

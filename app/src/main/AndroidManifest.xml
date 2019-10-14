@@ -32,8 +32,14 @@
         <activity android:name=".activity.SingleTaskActivity" android:launchMode="singleTask"/>
         <activity android:name=".activity.SingleInstanceActivity" android:launchMode="singleInstance"/>
         <activity android:name=".activity.LifecycleComponentActivity" android:launchMode="standard"/>
+        <activity android:name=".activity.SaveUIStateActivity" android:launchMode="standard"/>
+        <activity android:name=".activity.NoSaveUIActivity" android:launchMode="standard"/>
+
+        <activity android:name=".activity.StartActivityForResultActivity" android:launchMode="standard"/>
+        <activity android:name=".activity.ResultActivity" android:launchMode="standard"/>
 
         <activity android:name=".service.ServiceMainActivity"></activity>
+        <activity android:name=".service.MusicWithStartedAndBoundServiceActivity"></activity>
 
         <service android:name=".service.MyForegroundMusicService"
             android:enabled="true" android:exported="true"/>

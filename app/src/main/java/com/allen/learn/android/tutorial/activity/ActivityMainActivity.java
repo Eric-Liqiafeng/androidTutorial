@@ -17,6 +17,12 @@ public class ActivityMainActivity extends AppCompatActivity {
     private Button singleInstanceActivityBtn;
     private Button lifecycleComponentActivityBtn;
 
+    private Button goToSaveUIState;
+    private Button goToNoSaveUIState;
+
+    private Button goToStartActivityForResult;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +58,23 @@ public class ActivityMainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        goToSaveUIState = findViewById(R.id.goToSaveUIBtn);
+        goToSaveUIState.setOnClickListener(v->{
+            Intent intent = new Intent(ActivityMainActivity.this, SaveUIStateActivity.class);
+            startActivity(intent);
+        });
 
+        goToNoSaveUIState = findViewById(R.id.goToNoSaveUIState);
+        goToNoSaveUIState.setOnClickListener(v->{
+            Intent intent = new Intent(ActivityMainActivity.this, NoSaveUIActivity.class);
+            startActivity(intent);
+        });
+
+        goToStartActivityForResult = findViewById(R.id.goToStartActivityForResultBtn);
+        goToStartActivityForResult.setOnClickListener(v->{
+            Intent intent = new Intent(ActivityMainActivity.this, StartActivityForResultActivity.class);
+            startActivity(intent);
+        });
 
 
     }
