@@ -24,7 +24,7 @@ public class ResultActivity extends AppCompatActivity {
         goBackToStartForResultBtn.setOnClickListener(e->{
             Intent intent = new Intent();
             intent.putExtra("resultText",editText.getText());
-            setResult(RESULT_OK,intent);
+            setResult(-2,intent);
             finish();
         });
 

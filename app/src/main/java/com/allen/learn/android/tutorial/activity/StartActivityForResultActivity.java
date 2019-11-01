@@ -32,7 +32,7 @@ public class StartActivityForResultActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode==START_FOR_RESULT_CODE){
-            if (resultCode==RESULT_OK){
+            if (resultCode==-2){
             resultTextView.setText(data.getExtras().getCharSequence("resultText"));
             }
         }

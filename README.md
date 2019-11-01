@@ -1651,5 +1651,8 @@ registerReceiver(receiver, filter, Manifest.permission.SEND_SMS, null );
   - 使用 JobScheduler,详情请看[Inteligent Job Scheduling](https://developer.android.google.cn/topic/performance/scheduling.html).
 - 不要在broadcast receiver中启动activity，因为这回使得用户体验很差，尤其是有多个broadcast receiver的时候。这种时候，请考虑使用[notification](https://developer.android.google.cn/guide/topics/ui/notifiers/notifications.html)。
 
+# Fragment
+
+
 
 
