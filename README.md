@@ -374,7 +374,7 @@ Intent 对象描述了你想启动的activity或者描述了你想启动activity
 Intent intent = new Intent(this, SignInActivity.class);
 startActivity(intent);
 ```
-您的应用程序可能也要从您的活动执行一些操作,如发送电子邮件,短信,或状态更新,使用数据。在这种情况下,您的应用程序可能没有自己的活动来执行这样的行为,所以你可以利用活动提供的其他应用程序在设备上,它可以执行的操作。这是意图很有价值的地方:您可以创建一个意图描述你要执行的操作和系统启动适当的活动从另一个应用程序。如果有多个活动,可以处理的目的,然后,用户可以选择使用哪一个。例如,如果您想允许用户发送一封电子邮件,您可以创建以下Intent:
+你的应用程序可能也要从你的活动执行一些操作,如发送电子邮件,短信,或状态更新,使用数据。在这种情况下,你的应用程序可能没有自己的活动来执行这样的行为,所以你可以利用活动提供的其他应用程序在设备上,它可以执行的操作。这是意图很有价值的地方:你可以创建一个意图描述你要执行的操作和系统启动适当的活动从另一个应用程序。如果有多个活动,可以处理的目的,然后,用户可以选择使用哪一个。例如,如果你想允许用户发送一封电子邮件,你可以创建以下Intent:
 ```java
 Intent intent = new Intent(Intent.ACTION_SEND);
 intent.putExtra(Intent.EXTRA_EMAIL, recipientArray);
@@ -383,7 +383,7 @@ startActivity(intent);
 EXTRA_EMAIL额外添加到意图是一个字符串数组的电子邮件应该发送电子邮件地址。当一个电子邮件应用程序响应这个意图,它读取字符串数组中提供额外的和地方的”到“电子邮件领域组成形式。在这种情况下,电子邮件应用程序的活动开始,当用户完成时,resumes你的activity。
 #### startActivityForResult()
 有些时候，你需要从一个activity中得到返回结果。
-例如,你可能会开始一个activity,让用户在一个联系人列表中选择一个人;当它结束时,它将返回被选中的人。要做到这一点,您调用startActivityForResult(Intent,int)方法,在整数参数标识返回结果的回调，用来区分一个activity中多个startActivityForResult(Intent, int)的响应逻辑。它不是全局标识符，不会与其他的app或者activity起冲突。返回来的结果的回调方法是onActivityResult(int,int,Intent)。
+例如,你可能会开始一个activity,让用户在一个联系人列表中选择一个人;当它结束时,它将返回被选中的人。要做到这一点,你调用startActivityForResult(Intent,int)方法,在整数参数标识返回结果的回调，用来区分一个activity中多个startActivityForResult(Intent, int)的响应逻辑。它不是全局标识符，不会与其他的app或者activity起冲突。返回来的结果的回调方法是onActivityResult(int,int,Intent)。
 当一个子activity退出时，它可以调用setResult(int)去返回数据给父activity。子活动活动必须提供一个结果代码,可以是标准的返回结果RESULT_CANCELED,RESULT_OK，或者是从RESULT_FIRST_USER 开始的任何自定义值。此外，子activity可以包含任何数据的Intent 对象。父activity使用 onActivityResult(int,int,Intent)方法通过父活动提供的整数标识符来接收信息。
 如果子activity因为任何原因失败了，比如说崩溃了，父activity会接收到代码 RESULT_CANCELED。
 ```java
@@ -515,16 +515,16 @@ launchMode属性指定有关如何将activity启动到task中的指令。 你可
 - singleInstance
 与“ singleTask”相同，除了系统不会将任何其他activity启动到保存实例的task中。 activity始终在是其task的始终是单例的，只有一个成员。 所有用这种模式打开的activity都会在一个单独的task中。
 
-再举一个例子，Android浏览器应用通过在<activity>元素中指定singleTask启动模式，声明Web浏览器activity应始终在其自己的task中打开。 这意味着，如果您的应用发出打开Android浏览器的意图，则其activity不会与您的应用放在同一task中。 取而代之的是，要么为浏览器启动一个新task，要么，如果浏览器已经在后台运行了一个task，则将该task带到新的位置以处理新的意图。
+再举一个例子，Android浏览器应用通过在<activity>元素中指定singleTask启动模式，声明Web浏览器activity应始终在其自己的task中打开。 这意味着，如果你的应用发出打开Android浏览器的意图，则其activity不会与你的应用放在同一task中。 取而代之的是，要么为浏览器启动一个新task，要么，如果浏览器已经在后台运行了一个task，则将该task带到新的位置以处理新的意图。
 无论activity是在新task中启动还是在与启动该task的activity相同的task中启动，“后退”按钮始终会将用户带到上一个activity。 但是，如果启动指定singleTask启动模式的activity，则如果该activity的实例存在于后台task中，则整个task都将置于前台。 至此，back stack现在在stack的顶部包括来自提出的task的所有activity。 下图说明了这种情况。
 ![avatar](./image/diagram_backstack_singletask_multiactivity.png)
 具有“singleTask” launch model的activity如何添加到后stack的表示。 如果activity已经是具有自身后退stack的后台task的一部分，则整个back stack也将位于当前task之上。
 有关在manifest文件中使用launch mode的更多信息，请参见<activity>元素文档，其中对launchMode属性和接受的值进行了更多讨论。
-注意：您可以使用启动模式的Intent所包含的标志来覆盖您使用launchMode属性为activity指定的行为，如下一节所述。
+注意：你可以使用启动模式的Intent所包含的标志来覆盖你使用launchMode属性为activity指定的行为，如下一节所述。
 ##### Using Intent flags
 启动活动时，可以通过在传递给startActivity（）的Intent中包含标志来修改活动与其task的默认关联。 可以用来修改默认行为的flag是：
 - FLAG_ACTIVITY_NEW_TASK
-在新task中启动activity。 如果您现在正在为该activity运行task，那么该task将被带到前台并恢复其状态，并且该activity将在onNewIntent（）中收到新的Intent。
+在新task中启动activity。 如果你现在正在为该activity运行task，那么该task将被带到前台并恢复其状态，并且该activity将在onNewIntent（）中收到新的Intent。
 这产生的行为与上一节中讨论的“ singleTask” launchMode值相同。
 - FLAG_ACTIVITY_SINGLE_TOP
 如果正在启动的activity是当前activity（在后stack的顶部），则现有实例将收到对onNewIntent（）的调用，而不是创建该activity的新实例。
@@ -535,8 +535,8 @@ launchMode属性指定有关如何将activity启动到task中的指令。 你可
 FLAG_ACTIVITY_CLEAR_TOP最常与FLAG_ACTIVITY_NEW_TASK结合使用。 当这些标志一起使用时，它们是一种在另一个task中定位现有activity并将其置于可以响应Intent的位置的方法。
 Note：如果指定activity的启动模式为“标准”，则也会将其从stack中删除，并在其位置启动一个新实例以处理传入的Intent。 这是因为当启动模式为“标准”时，总是为新Intent创建新实例。
 #### Handling affinities
-affinity指示activity喜欢属于哪个task。 默认情况下，同一应用程序中的所有activity都具有相互关联性。 因此，默认情况下，同一应用程序中的所有activity都希望属于同一task。 但是，您可以修改activity的默认关联性。 在不同应用程序中定义的activity可以共享affinity，或者可以在同一应用程序中定义的activity分配不同的task affinity。
-您可以使用<activity>元素的taskAffinity属性修改任何给定activity的 affinity 。
+affinity指示activity喜欢属于哪个task。 默认情况下，同一应用程序中的所有activity都具有相互关联性。 因此，默认情况下，同一应用程序中的所有activity都希望属于同一task。 但是，你可以修改activity的默认关联性。 在不同应用程序中定义的activity可以共享affinity，或者可以在同一应用程序中定义的activity分配不同的task affinity。
+你可以使用<activity>元素的taskAffinity属性修改任何给定activity的 affinity 。
 taskAffinity属性采用字符串值，该字符串值必须与<manifest>元素中声明的默认程序包名称唯一，因为系统使用该名称来标识应用程序的默认task关联。
 affinity在下面两种情况下起作用：
 - 当Intent 启动activity的时候包含了FLAG_ACTIVITY_NEW_TASK flag。
@@ -544,13 +544,13 @@ affinity在下面两种情况下起作用：
 如果这个flag导致用户开始了一个新的task，而且用户按下home键离开这个activity，那么用户必须有某种方法可以navigate回到这个task。一些实体，比如通知管理器经常在外部task中启动activity，而不是将其作为自己的一部分，因此他们总是将FLAG_ACTIVITY_NEW_TASK 放入传递给startActivity() 的Intent中。如果你的可以被外部实体唤起的activity可能使用了这个flag唤起的，请注意用户有独立的方式来返回已经启动的任务，例如使用launch icon(task的root activity有 CATEGORY_LAUNCHER intent filter，详情请看[Starting a task](https://developer.android.google.cn/guide/components/activities/tasks-and-back-stack#Starting)).
 - 当一个activity带有allowTaskReparenting 属性并且设置为true. 
 在这种情况下，activity可以从它启动的task移动到具有关联性的task。
-例如，假设将报告选定城市的天气状况的activity定义为旅行应用程序的一部分。 它与同一应用程序中的其他activity具有相同的关联性（默认应用程序关联性），并且允许使用此属性进行重新关联。 当您的一项activity开始天气报告者activity时，它最初与您的activity属于同一task。 但是，当旅行应用程序的task来到前台时，天气报告者activity将重新分配给该task并显示在其中。
+例如，假设将报告选定城市的天气状况的activity定义为旅行应用程序的一部分。 它与同一应用程序中的其他activity具有相同的关联性（默认应用程序关联性），并且允许使用此属性进行重新关联。 当你的一项activity开始天气报告者activity时，它最初与你的activity属于同一task。 但是，当旅行应用程序的task来到前台时，天气报告者activity将重新分配给该task并显示在其中。
 
 tips:
-提示：如果从用户的角度来看，一个APK文件包含多个app，则您可能希望使用taskAffinity属性为与每个app相关联的activity分配不同的affinity。
+提示：如果从用户的角度来看，一个APK文件包含多个app，则你可能希望使用taskAffinity属性为与每个app相关联的activity分配不同的affinity。
 #### Clearing the back stack
 如果用户长时间离开task，系统将清除除 root activity以外的所有activity的task。 当用户再次返回task时，仅还原root activity。 系统的行为方式是这样的，因为经过较长时间后，用户可能已经放弃了以前的工作，而返回到task以开始新的工作。
-您可以使用一些activity属性来修改此行为：
+你可以使用一些activity属性来修改此行为：
 - alwaysRetainTaskState
 如果在任务的root activity 中将此属性设置为“ true”，则不会发生上述默认行为。 即使经过很长时间，该任务也会将所有activity保留在其堆栈中。
 - clearTaskOnLaunch
@@ -589,34 +589,34 @@ Note:
 -Bound
 bound service 提供一个client-server 接口用来作为组件和service之间的通信。当应用程序组件通过调用bindService（）绑定到service时，就绑定了service。 绑定的service提供了一个客户端-service器接口，该接口允许组件与该service进行交互，发送请求，接收结果，甚至通过进程间通信（IPC）跨进程进行交互。 只要绑定了另一个应用程序组件，绑定service就会运行。 多个组件可以一次绑定到service，但是当所有组件取消绑定时，该service将被销毁。
 
-尽管本文档通常单独讨论启动的服务和绑定的服务，但是您的服务可以同时使用两种方式-它可以启动（无限期运行），还可以被绑定。 这仅是您是否实现几个回调方法的问题：onStartCommand（）允许组件启动它，onBind（）允许组件绑定它。
-不管您的service是启动，绑定还是两者都使用，任何应用程序组件都可以以与任何组件都可以使用activity的方式相同的方式使用该service（即使来自单独的应用程序），也可以使用Intent启动它。 但是，您可以在清单文件中将service声明为私有service，并阻止对其他应用程序的访问。 关于这一点的在[Declaring the service in the manifest](https://developer.android.google.cn/guide/components/services#Declaring)中有更多讨论。
+尽管本文档通常单独讨论启动的服务和绑定的服务，但是你的服务可以同时使用两种方式-它可以启动（无限期运行），还可以被绑定。 这仅是你是否实现几个回调方法的问题：onStartCommand（）允许组件启动它，onBind（）允许组件绑定它。
+不管你的service是启动，绑定还是两者都使用，任何应用程序组件都可以以与任何组件都可以使用activity的方式相同的方式使用该service（即使来自单独的应用程序），也可以使用Intent启动它。 但是，你可以在清单文件中将service声明为私有service，并阻止对其他应用程序的访问。 关于这一点的在[Declaring the service in the manifest](https://developer.android.google.cn/guide/components/services#Declaring)中有更多讨论。
 - note:
-注意：service在其托管过程的主线程中运行； 除非另行指定，否则该service不会创建自己的线程，也不会在单独的进程中运行。 如果您的service要执行任何占用大量CPU的工作或blocking 操作（例如MP3播放或联网），则应在service中创建一个新线程以完成该工作。 通过使用单独的线程，可以降低应用程序无响应（ANR）错误的风险，并且应用程序的主线程可以保持专用于用户与activity的交互。
+注意：service在其托管过程的主线程中运行； 除非另行指定，否则该service不会创建自己的线程，也不会在单独的进程中运行。 如果你的service要执行任何占用大量CPU的工作或blocking 操作（例如MP3播放或联网），则应在service中创建一个新线程以完成该工作。 通过使用单独的线程，可以降低应用程序无响应（ANR）错误的风险，并且应用程序的主线程可以保持专用于用户与activity的交互。
 ## Service and Thread
-service只是一个可以在后台运行的组件，即使用户没有与您的应用程序进行交互，因此仅应在需要时才创建service。如果是尽在用户与app交互时执行一些主线程之外的工作，你应该创建一个新线程而不是service.例如你想仅在activity active的时候播放音乐，可以在onCreate() 中创建一个吸纳成，在onStart() 中开始运行它，然后再onStop() 中停止它。还可以考虑使用AnsyTask 或者HandlerThread 代替传统的Thread类，有关线程的更多信息，请参考
+service只是一个可以在后台运行的组件，即使用户没有与你的应用程序进行交互，因此仅应在需要时才创建service。如果是尽在用户与app交互时执行一些主线程之外的工作，你应该创建一个新线程而不是service.例如你想仅在activity active的时候播放音乐，可以在onCreate() 中创建一个吸纳成，在onStart() 中开始运行它，然后再onStop() 中停止它。还可以考虑使用AnsyTask 或者HandlerThread 代替传统的Thread类，有关线程的更多信息，请参考
 - [Processes and Threading](https://developer.android.google.cn/guide/components/processes-and-threads.html#Threads)
-请记住，如果您确实使用了service，则默认情况下该service仍在应用程序的主线程中运行，因此，如果该service执行密集或阻塞操作，则仍应在该service中创建一个新线程。
+请记住，如果你确实使用了service，则默认情况下该service仍在应用程序的主线程中运行，因此，如果该service执行密集或阻塞操作，则仍应在该service中创建一个新线程。
 ## The basics
-要创建service，必须创建Service的子类或使用其现有子类之一。 在实现中，您必须重写一些处理service生命周期关键方面的回调方法，并在适当的情况下提供一种允许组件绑定到service的机制。 这些是您应该重写的最重要的回调方法：
+要创建service，必须创建Service的子类或使用其现有子类之一。 在实现中，你必须重写一些处理service生命周期关键方面的回调方法，并在适当的情况下提供一种允许组件绑定到service的机制。 这些是你应该重写的最重要的回调方法：
 - onStartCommand()
 当另一个组件（例如activity）请求启动service时，系统通过调用startService（）来调用此方法。 执行此方法时，service将启动并可以无限期在后台运行。 如果执行此操作，则有责任通过调用stopSelf（）或stopService（）在service完成后停止该service。 如果只想提供绑定，则不需要实现此方法。
 - onBind()
-当另一个组件想要与service绑定（例如执行RPC）时，系统通过调用bindService（）来调用此方法。 在此方法的实现中，必须提供一个接口，客户端可以通过返回IBinder使用该接口与service进行通信。 您必须始终实现此方法。 但是，如果不想允许绑定，则应返回null。
+当另一个组件想要与service绑定（例如执行RPC）时，系统通过调用bindService（）来调用此方法。 在此方法的实现中，必须提供一个接口，客户端可以通过返回IBinder使用该接口与service进行通信。 你必须始终实现此方法。 但是，如果不想允许绑定，则应返回null。
 - onCreate() 
 最初创建service时（在调用onStartCommand（）或onBind（）之前），系统将调用此方法以执行一次性设置过程。 如果service已经在运行，则不会调用此方法。
 - onDestroy()
-当不再使用该service并将其销毁时，系统将调用此方法。 您的service应实现此方法以清理所有资源，例如线程，注册的侦听器或接收器。 这是service收到的最后一个回调。
+当不再使用该service并将其销毁时，系统将调用此方法。 你的service应实现此方法以清理所有资源，例如线程，注册的侦听器或接收器。 这是service收到的最后一个回调。
 
 
 如果组件通过调用startService()来启动service（这导致对onStartCommand()的调用），则该service将继续运行，直到通过stopSelf()使其自身停止运行，或者另一个组件通过调用stopService()将其销毁。
 
 如果组件调用 bindService() 方法去创建service 而没有调用onStartCommand 方法，service 只会在组件绑定的时间内运行，一旦所有组件都跟这个service 解绑，那么这个服务会被销毁。
 
-Android系统仅在内存不足时停止service，并且必须为具有用户焦点的activity恢复系统资源。 如果service绑定到以用户为中心的activity，则它被杀死的可能性较小； 如果service被声明为在前台运行，则很少被杀死。 如果该service已启动并且正在长时间运行，则系统会随着时间的推移降低其在后台任务列表中的位置，并且该service极易被杀死-如果启动了service，则必须将其设计为通过以下方式妥善处理重启问题： 系统。 如果系统终止了您的service，它将在资源可用时立即重新启动它，但这也取决于您从onStartCommand() 返回的值。 有关系统何时销毁service的更多信息，请参阅[Processes and Threading](https://developer.android.google.cn/guide/components/processes-and-threads.html)文档。.
-在以下各节中，您将看到如何创建startService（）和bindService（）service方法，以及如何从其他应用程序组件中使用它们。
+Android系统仅在内存不足时停止service，并且必须为具有用户焦点的activity恢复系统资源。 如果service绑定到以用户为中心的activity，则它被杀死的可能性较小； 如果service被声明为在前台运行，则很少被杀死。 如果该service已启动并且正在长时间运行，则系统会随着时间的推移降低其在后台任务列表中的位置，并且该service极易被杀死-如果启动了service，则必须将其设计为通过以下方式妥善处理重启问题： 系统。 如果系统终止了你的service，它将在资源可用时立即重新启动它，但这也取决于你从onStartCommand() 返回的值。 有关系统何时销毁service的更多信息，请参阅[Processes and Threading](https://developer.android.google.cn/guide/components/processes-and-threads.html)文档。.
+在以下各节中，你将看到如何创建startService（）和bindService（）service方法，以及如何从其他应用程序组件中使用它们。
 ### Declaring a service in the manifest
-您必须在应用程序的manifest文件中声明所有service，就像对activity和其他组件一样。
+你必须在应用程序的manifest文件中声明所有service，就像对activity和其他组件一样。
 在<application>节点下面添加<service>的子节点来声明你的service.下面是个例子：
 ```xml
 <manifest ... >
@@ -628,10 +628,10 @@ Android系统仅在内存不足时停止service，并且必须为具有用户焦
 </manifest>
 ```
 查看[<service>](https://developer.android.google.cn/guide/topics/manifest/service-element.html)文档来查看更多关于定义service的信息。
-您还可以在<service>元素中包含其他属性来定义属性，例如启动以及运行service所需的权限。 android：name属性是唯一必需的属性-它指定service的类名称。 在发布应用程序之后，请保留此名称不变，以避免由于依赖于启动或绑定service的显式Intent而导致代码被破坏的风险(请阅读博客文章[Things That Cannot change](http://android-developers.blogspot.com/2011/06/things-that-cannot-change.html))。
+你还可以在<service>元素中包含其他属性来定义属性，例如启动以及运行service所需的权限。 android：name属性是唯一必需的属性-它指定service的类名称。 在发布应用程序之后，请保留此名称不变，以避免由于依赖于启动或绑定service的显式Intent而导致代码被破坏的风险(请阅读博客文章[Things That Cannot change](http://android-developers.blogspot.com/2011/06/things-that-cannot-change.html))。
 - Caution:
-注意：为确保您的app安全，请在启动service时始终使用显式Intent，并且不要为service声明Intent filter。 使用隐式Intent启动service是一种安全隐患，因为您不能确定响应该Intent的service，并且用户无法看到哪个service会启动。 从Android 5.0（API级别21）开始，如果您以隐式Intent调用bindService（），系统将抛出异常。
-您可以通过包含android：exported属性并将其设置为false来确保您的service仅对您的应用可用。 即使使用明确的Intent，这也可以有效地阻止其他应用启动service。
+注意：为确保你的app安全，请在启动service时始终使用显式Intent，并且不要为service声明Intent filter。 使用隐式Intent启动service是一种安全隐患，因为你不能确定响应该Intent的service，并且用户无法看到哪个service会启动。 从Android 5.0（API级别21）开始，如果你以隐式Intent调用bindService（），系统将抛出异常。
+你可以通过包含android：exported属性并将其设置为false来确保你的service仅对你的应用可用。 即使使用明确的Intent，这也可以有效地阻止其他应用启动service。
 -Note:
 用户可以查看其设备上正在运行的service，如果他们看到自己不认识或者不信任的service，则可以停止该service.为了避免用户意外停止你的service，你需要将android:description属性添加到应用清单中的<service>元素中。在描述中，请提供简短的句子，以解释该服务的功能以及带来的好处。
 
@@ -644,13 +644,13 @@ service启动时，其生命周期与启动它的组件无关。该service可以
 
 例如，假设一个活动需要将一些数据保存到在线数据库中。该活动可以启动伴随service，并通过将Intent传递给startService()来传递其数据以进行保存。该service在onStartCommand()中接收Intent，连接到Internet，并执行数据库事务。事务完成后，service将自行停止并被销毁。
 - Caution:  
-service在与声明它的应用程序相同的进程中运行，并且默认情况下在该应用程序的主线程中运行。 如果您的service在用户与同一应用程序中的活动进行交互时执行密集或阻塞操作，则该service会降低活动性能。 为避免影响应用程序性能，请在service内部启动一个新线程。
+service在与声明它的应用程序相同的进程中运行，并且默认情况下在该应用程序的主线程中运行。 如果你的service在用户与同一应用程序中的活动进行交互时执行密集或阻塞操作，则该service会降低活动性能。 为避免影响应用程序性能，请在service内部启动一个新线程。
 
-传统上，您可以扩展两个类来创建启动的服务：
+传统上，你可以扩展两个类来创建启动的服务：
 - Service  
 这是所有service的基类。 扩展此类时，创建一个新线程以使service可以完成其所有工作非常重要。 该service默认情况下使用应用程序的主线程，这可能会降低应用程序正在运行的任何活动的性能。
 - IntentService  
-这是Service的子类，它使用辅助线程来一次处理所有启动请求。 如果您不需要service同时处理多个请求，则这是最佳选择。 实现onHandleIntent（），它接收每个启动请求的Intent，以便您可以完成后台工作。
+这是Service的子类，它使用辅助线程来一次处理所有启动请求。 如果你不需要service同时处理多个请求，则这是最佳选择。 实现onHandleIntent（），它接收每个启动请求的Intent，以便你可以完成后台工作。
 
 
 以下各节描述如何使用这些类中的任何一种来实现service。
@@ -658,12 +658,12 @@ service在与声明它的应用程序相同的进程中运行，并且默认情�
 因为大多数启动的service不需要同时处理多个请求（这实际上可能是危险的多线程方案），所以最好使用IntentService类实现service。
 IntentService类执行以下操作：
 - 它创建一个默认的工作线程，该线程执行应用程序的主线程之外的所有传递给onStartCommand()的Intent。
-- 创建一个工作队列，一次将一个Intent传递给你的onHandleIntent()实现，因此您不必担心多线程。
-- 在处理所有启动请求之后停止服务，因此您不必调用stopSelf()。
+- 创建一个工作队列，一次将一个Intent传递给你的onHandleIntent()实现，因此你不必担心多线程。
+- 在处理所有启动请求之后停止服务，因此你不必调用stopSelf()。
 - 提供onBind() 的默认实现，该实现返回null。
 - 提供onStartCommand() 的默认实现，该实现将Intent发送到工作队列，然后发送到onHandleIntent()实现。
 
-要完成客户端提供的工作，请实现onHandleIntent（）。 但是，您还需要为服务提供一个小的构造函数。
+要完成客户端提供的工作，请实现onHandleIntent（）。 但是，你还需要为服务提供一个小的构造函数。
 以下时IntentService 实现的一个例子：
 ```java
 public class HelloIntentService extends IntentService {
@@ -694,8 +694,8 @@ public class HelloIntentService extends IntentService {
   }
 }
 ```
-这就是您所需要的：onHandleIntent()的构造函数和实现。
-如果您决定还重写其他回调方法，例如onCreate()，onStartCommand()或onDestroy()，请确保调用父类实现，以便IntentService可以正确处理工作线程。
+这就是你所需要的：onHandleIntent()的构造函数和实现。
+如果你决定还重写其他回调方法，例如onCreate()，onStartCommand()或onDestroy()，请确保调用父类实现，以便IntentService可以正确处理工作线程。
 例如，onStartCommand()必须返回默认实现，这是将Intent传递给onHandleIntent()的方式：
 ```java
 @Override
@@ -704,11 +704,11 @@ public int onStartCommand(Intent intent, int flags, int startId) {
     return super.onStartCommand(intent,flags,startId);
 }
 ```
-除了onHandleIntent()之外，您不需要调用超类的唯一方法是onBind()。 仅当您的service允许绑定时才需要实现此功能。
-在下一节中，您将看到扩展基本Service类时如何实现相同类型的service，该类使用更多代码，但如果需要同时处理启动请求，则可能是合适的。
+除了onHandleIntent()之外，你不需要调用超类的唯一方法是onBind()。 仅当你的service允许绑定时才需要实现此功能。
+在下一节中，你将看到扩展基本Service类时如何实现相同类型的service，该类使用更多代码，但如果需要同时处理启动请求，则可能是合适的。
 
 ### Extending the Service class
-使用IntentService可以非常轻松地实现启动service。 但是，如果您需要service执行多线程（而不是通过工作队列处理启动请求），则可以扩展Service类以处理每个Intent。
+使用IntentService可以非常轻松地实现启动service。 但是，如果你需要service执行多线程（而不是通过工作队列处理启动请求），则可以扩展Service类以处理每个Intent。
 
 为了进行比较，下面的示例代码显示了Service类的实现，该类使用IntentService执行与上一个示例相同的工作。 也就是说，对于每个启动请求，它使用工作线程执行作业，并且一次仅处理一个请求。
 ```java
@@ -778,10 +778,10 @@ public class HelloService extends Service {
   }
 }
 ```
-如您所见，与使用IntentService相比，要做的工作要多得多。
-但是，由于您自己处理对onStartCommand()的每次调用，因此可以同时执行多个请求。 这不是本示例所要做的，但是如果您要这样做，则可以为每个请求创建一个新线程并立即运行它们，而不用等待上一个请求完成。
+如你所见，与使用IntentService相比，要做的工作要多得多。
+但是，由于你自己处理对onStartCommand()的每次调用，因此可以同时执行多个请求。 这不是本示例所要做的，但是如果你要这样做，则可以为每个请求创建一个新线程并立即运行它们，而不用等待上一个请求完成。
 
-请注意，onStartCommand()方法必须返回一个整数。 整数是一个值，它描述在系统终止服务时系统应如何继续服务。 IntentService的默认实现会为您处理此问题，但是您可以对其进行修改。 onStartCommand()的返回值必须是以下常量之一：
+请注意，onStartCommand()方法必须返回一个整数。 整数是一个值，它描述在系统终止服务时系统应如何继续服务。 IntentService的默认实现会为你处理此问题，但是你可以对其进行修改。 onStartCommand()的返回值必须是以下常量之一：
 - [*START_NOT_STICKY*](https://developer.android.google.cn/reference/android/app/Service.html#START_NOT_STICKY):   
     值为2，表示当没有pending的Intent 时系统不会重新create 服务。
 - [*START_STICKY*](https://developer.android.google.cn/reference/android/app/Service.html#START_STICKY):  
@@ -792,9 +792,9 @@ public class HelloService extends Service {
 有关这些返回值的更多详细信息，请参见每个常量的链接参考文档。 有关此类服务实现的扩展示例，请参阅[MessagingService sample on Github](https://github.com/googlesamples/android-MessagingService)示例中的MessagingService类。
 
 ### Start a service
-您可以通过将Intent传递给startService（）或startForegroundService（）从活动或其他应用程序组件启动service。 Android系统调用service的onStartCommand（）方法，并将其传递给Intent，以指定要启动的service。
+你可以通过将Intent传递给startService（）或startForegroundService（）从活动或其他应用程序组件启动service。 Android系统调用service的onStartCommand（）方法，并将其传递给Intent，以指定要启动的service。
 - Note:  
-如果您的应用程序的目标是API级别26或更高级别，则除非应用程序本身位于前台，否则系统会限制使用或创建后台service。 如果应用程序需要创建前台service，则该应用程序应调用startForegroundService()。 该方法创建了后台service，但是该方法向系统发出信号，表明该service会将自己提升到前台。 创建service后，service必须在五秒钟内调用其startForeground()方法。
+如果你的应用程序的目标是API级别26或更高级别，则除非应用程序本身位于前台，否则系统会限制使用或创建后台service。 如果应用程序需要创建前台service，则该应用程序应调用startForegroundService()。 该方法创建了后台service，但是该方法向系统发出信号，表明该service会将自己提升到前台。 创建service后，service必须在五秒钟内调用其startForeground()方法。
 例如，activity可以使用带有startService（）的显式Intent来启动上一节（HelloService）中的示例service，如下所示：
 ```java
    Intent intent = new Intent(this, HelloService.class);
@@ -802,7 +802,7 @@ public class HelloService extends Service {
 ```
 startService()方法立即返回，并且Android系统调用service的onStartCommand()方法。 如果该service尚未运行，则系统首先调用onCreate()，然后调用onStartCommand()。
 
-如果service也不提供绑定，则startService()附带的Intent是应用程序组件与service之间唯一的通信方式。 但是，如果您希望service将结果发送回去，则启动该service的客户端可以为广播创建一个PendingIntent（使用getBroadcast()），然后在启动该service的Intent中将其传递给该service。 然后，该service可以使用广播来传递结果。
+如果service也不提供绑定，则startService()附带的Intent是应用程序组件与service之间唯一的通信方式。 但是，如果你希望service将结果发送回去，则启动该service的客户端可以为广播创建一个PendingIntent（使用getBroadcast()），然后在启动该service的Intent中将其传递给该service。 然后，该service可以使用广播来传递结果。
 
 启动service的多个请求导致对该service的onStartCommand()的多个相应调用。 但是，仅需要一个停止service的请求（使用stopSelf()或stopService()）即可停止它。
 
@@ -815,11 +815,11 @@ startService()方法立即返回，并且Android系统调用service的onStartCom
 ### Create a bound service
 绑定service是一种允许应用程序组件通过调用bindService()来建立长期连接的方式与之绑定的service。它通常不允许组件通过调用startService()来启动它。
 
-当您想通过应用程序中的activity和其他组件与service进行交互，或者想通过进程间通信（IPC）向其他应用程序公开某些应用程序的功能时，请创建绑定service。
+当你想通过应用程序中的activity和其他组件与service进行交互，或者想通过进程间通信（IPC）向其他应用程序公开某些应用程序的功能时，请创建绑定service。
 
-要创建绑定service，请实现onBind()回调方法以返回IBinder，该IBinder定义了与service进行通信的接口。然后，其他应用程序组件可以调用bindService()来检索接口并开始在service上调用方法。该service仅用于service与其绑定的应用程序组件，因此，当没有任何组件绑定至该service时，系统将销毁它。您不需要以与通过onStartCommand()启动service时相同的方式停止绑定service。
+要创建绑定service，请实现onBind()回调方法以返回IBinder，该IBinder定义了与service进行通信的接口。然后，其他应用程序组件可以调用bindService()来检索接口并开始在service上调用方法。该service仅用于service与其绑定的应用程序组件，因此，当没有任何组件绑定至该service时，系统将销毁它。你不需要以与通过onStartCommand()启动service时相同的方式停止绑定service。
 
-要创建绑定service，必须定义一个接口，该接口指定客户端如何与service进行通信。service和客户端之间的此接口必须是IBinder的实现，并且是您的service必须从onBind()回调方法返回的接口。客户端收到IBinder后，它可以开始通过该接口与service进行交互。
+要创建绑定service，必须定义一个接口，该接口指定客户端如何与service进行通信。service和客户端之间的此接口必须是IBinder的实现，并且是你的service必须从onBind()回调方法返回的接口。客户端收到IBinder后，它可以开始通过该接口与service进行交互。
 
 多个客户端可以同时绑定到service。客户端与service交互完成后，它将调用unbindService()进行绑定。当没有客户端绑定到该service时，系统将销毁该service。
 
@@ -839,7 +839,7 @@ toast通知是一条消息，在消失之前仅出现在当前窗口的表面上
 ### Running a service in the foreground
 前台service是用户主动意识到的service，不是内存不足时系统要杀死的候选对象。 前台service必须为状态栏提供一个通知，该通知位于“正在进行”标题下。 这意味着除非service停止或从前台删除，否则无法取消该通知。
 - Caution: 限制app 使用foreground service  
-仅当您的应用程序需要执行用户注意到的任务时才应使用前台service，即使他们没有直接与应用程序进行交互。 因此，前台service必须显示优先级为PRIORITY_LOW或更高的状态栏通知，这有助于确保用户了解您的应用程序在做什么。 如果该操作的重要性不够低，以至于您想使用最低优先级通知，则可能不应该使用service。 相反，请考虑使用计划的作业。   
+仅当你的应用程序需要执行用户注意到的任务时才应使用前台service，即使他们没有直接与应用程序进行交互。 因此，前台service必须显示优先级为PRIORITY_LOW或更高的状态栏通知，这有助于确保用户了解你的应用程序在做什么。 如果该操作的重要性不够低，以至于你想使用最低优先级通知，则可能不应该使用service。 相反，请考虑使用计划的作业。   
 每个运行service的应用程序都会给系统带来额外的负担，从而消耗系统资源。 如果应用程序尝试通过使用低优先级通知来隐藏其service，则可能会削弱用户正在与之交互的应用程序的性能。 因此，如果应用程序尝试使用最低优先级通知运行service，则系统会在通知抽屉的底部调出该应用程序的行为。
 
 例如，应该将播放来自service的音乐的音乐播放器设置为在前台运行，因为用户明确知道其操作。 状态栏中的通知可能会指示当前歌曲，并允许用户启动与音乐播放器进行交互的活动。 同样，让用户跟踪其运行的应用程序将需要前台service来跟踪用户的位置。
@@ -870,7 +870,7 @@ startForeground(ONGOING_NOTIFICATION_ID, notification);
 想了解更多关于 notification 的信息，请参考 [Create Status Bar Notification](https://developer.android.google.cn/guide/topics/ui/notifiers/notifications.html)
 
 ## Managing the life cycle of a service
-service的生命周期比活动的生命周期简单得多。但是，更重要的是，您必须密切注意service的创建和销毁方式，因为service可以在用户不知情的情况下在后台运行。
+service的生命周期比活动的生命周期简单得多。但是，更重要的是，你必须密切注意service的创建和销毁方式，因为service可以在用户不知情的情况下在后台运行。
 
 service生命周期（从创建之时到销毁之时）可以遵循以下两个路径之一：
 
@@ -880,7 +880,7 @@ service生命周期（从创建之时到销毁之时）可以遵循以下两个�
 - 绑定service  
 当另一个组件（客户端）调用bindService()时创建service。然后，客户端通过IBinder接口与service进行通信。客户端可以通过调用unbindService()来关闭连接。多个客户端可以绑定到同一service，并且当所有客户端取消绑定时，系统将销毁该service。该service不需要自行停止。
 
-这两条路径并不完全分开。您可以绑定到已经由startService()启动的service。例如，您可以通过调用带有标识要播放音乐的Intent的startService()来启动背景音乐service。之后，可能在用户想要对播放器进行某种控制或获取有关当前歌曲的信息时，可以通过调用bindService()将活动绑定到service。在这种情况下，直到所有客户端解除绑定后，stopService()或stopSelf()才真正停止service。
+这两条路径并不完全分开。你可以绑定到已经由startService()启动的service。例如，你可以通过调用带有标识要播放音乐的Intent的startService()来启动背景音乐service。之后，可能在用户想要对播放器进行某种控制或获取有关当前歌曲的信息时，可以通过调用bindService()将活动绑定到service。在这种情况下，直到所有客户端解除绑定后，stopService()或stopSelf()才真正停止service。
 
 ### Implementing the lifecycle callbacks
 跟activity 一样， service 也有它的lifecycle 回调方法。
@@ -941,17 +941,17 @@ Note:
 ## Create a background service
 IntentService类提供了用于在单个后台线程上运行操作的简单结构。 这使其可以处理长时间运行的操作，而不会影响用户界面的响应能力。 此外，IntentService不受大多数用户界面生命周期事件的影响，因此它会在可能会关闭AsyncTask的情况下继续运行.
 IntentService有一些限制：
-- 它不能直接与您的用户界面进行交互。 要将其结果放入用户界面，您必须将其发送到activity中。
-- 工作请求按顺序运行。 如果某个操作正在IntentService中运行，并且您向它发送了另一个请求，则该请求将等待直到第一个操作完成。
+- 它不能直接与你的用户界面进行交互。 要将其结果放入用户界面，你必须将其发送到activity中。
+- 工作请求按顺序运行。 如果某个操作正在IntentService中运行，并且你向它发送了另一个请求，则该请求将等待直到第一个操作完成。
 - 在IntentService上运行的操作不能被中断。
 
 但是，在大多数情况下，IntentService是执行简单后台操作的首选方法。
-本指南向您展示如何执行以下操作：
+本指南向你展示如何执行以下操作：
 - 创建自己的IntentService子类。
 - 创建所需的回调方法onHandleIntent（）。
 - 在清单文件中定义IntentService。
 ### Handle incoming intents
-要为您的应用创建IntentService组件，请定义一个扩展IntentService的类，并在其中定义一个覆盖onHandleIntent（）的方法。 例如：
+要为你的应用创建IntentService组件，请定义一个扩展IntentService的类，并在其中定义一个覆盖onHandleIntent（）的方法。 例如：
 ```java
 public class RSSPullService extends IntentService {
     @Override
@@ -986,12 +986,12 @@ IntentService还需要在应用程序清单中有一个entity。 将此entity作
 android：name属性指定IntentService的类名称。  
 请注意，<service>元素不包含Intent filter。 将工作请求发送到service的activity使用显式的Intent，因此不需要filter。 这也意味着只有同一应用程序或具有相同用户ID的其他应用程序中的组件才能访问该服务。
 
-有了基本的IntentService类之后，您就可以使用Intent对象向其发送工作请求了。 [Send work requests to the background service](https://developer.android.google.cn/training/run-background-service/send-request)描述了构造这些对象并将其发送到IntentService的过程。
+有了基本的IntentService类之后，你就可以使用Intent对象向其发送工作请求了。 [Send work requests to the background service](https://developer.android.google.cn/training/run-background-service/send-request)描述了构造这些对象并将其发送到IntentService的过程。
 
 ## Send work requests to the background service
-上一课向您展示了如何创建JobIntentService类。 本课向您展示如何通过使Intent与工作排队来触发JobIntentService运行操作。 该Intent可以选择包含JobIntentService要处理的数据。
+上一课向你展示了如何创建JobIntentService类。 本课向你展示如何通过使Intent与工作排队来触发JobIntentService运行操作。 该Intent可以选择包含JobIntentService要处理的数据。
 ### Create and send a work request to a JobIntentService
-要创建工作请求并将其发送到JobIntentService，请创建一个Intent并将其排队，以通过调用enqueueWork()使其执行。 (可选)您可以将数据添加到Intent中（以Intent 的extras）以供JobIntentService处理。 有关创建意图的更多信息，请阅读[Intents and Intent Filters](https://developer.android.google.cn/guide/components/intents-filters.html)。
+要创建工作请求并将其发送到JobIntentService，请创建一个Intent并将其排队，以通过调用enqueueWork()使其执行。 (可选)你可以将数据添加到Intent中（以Intent 的extras）以供JobIntentService处理。 有关创建意图的更多信息，请阅读[Intents and Intent Filters](https://developer.android.google.cn/guide/components/intents-filters.html)。
 以下代码片段演示了此过程： 
 - 1. 为一个名为RSSPullService 的JobIntentService创建一个新的Intent。
 ```java
@@ -1009,15 +1009,15 @@ serviceIntent.putExtra("download_url", dataUrl));
 private static final int RSS_JOB_ID = 1000;
 RSSPullService.enqueueWork(getContext(), RSSPullService.class, RSS_JOB_ID, serviceIntent);
 ```
-注意，您可以从activity或Fragment 中的任何位置发送工作请求。 例如，如果您需要首先获取用户输入，则可以从响应按钮单击或类似手势的回调中发送请求。
+注意，你可以从activity或Fragment 中的任何位置发送工作请求。 例如，如果你需要首先获取用户输入，则可以从响应按钮单击或类似手势的回调中发送请求。
 
 调用enqueueWork（）后，JobIntentService将执行其onHandleWork（）方法中定义的工作，然后自行停止。
-下一步是将工作请求的结果发送回原来的Activity或Fragment。下一课将向您展示如何使用[BroadcastReceiver](https://developer.android.google.cn/reference/android/content/BroadcastReceiver.html)进行此操作。
+下一步是将工作请求的结果发送回原来的Activity或Fragment。下一课将向你展示如何使用[BroadcastReceiver](https://developer.android.google.cn/reference/android/content/BroadcastReceiver.html)进行此操作。
 ## Report work status(需要先看BroadcastReceiver)
-本指南向您展示如何在后台service中向发送请求的组件报告工作请求的状态。 例如，这使您可以在Activity对象的UI中报告请求的状态。 建议的发送和接收状态的方法是使用LocalBroadcastManager，它将broadcast Intent对象限制为您自己的应用程序中的组件。
+本指南向你展示如何在后台service中向发送请求的组件报告工作请求的状态。 例如，这使你可以在Activity对象的UI中报告请求的状态。 建议的发送和接收状态的方法是使用LocalBroadcastManager，它将broadcast Intent对象限制为你自己的应用程序中的组件。
 
 ### Report status from a JobIntentService
-要将JobIntentService中的工作请求状态发送给其他组件，请首先创建一个在其扩展数据中包含该状态的Intent。 作为一种选择，您可以向该Intent添加操作和数据URI。
+要将JobIntentService中的工作请求状态发送给其他组件，请首先创建一个在其扩展数据中包含该状态的Intent。 作为一种选择，你可以向该Intent添加操作和数据URI。
 
 接下来，通过调用LocalBroadcastManager.sendBroadcast()发送Intent。 这会将Intent发送到应用程序中已注册接收它的任何组件。 要获取LocalBroadcastManager的实例，请调用getInstance()。
 例子：
@@ -1069,7 +1069,7 @@ private class DownloadStateReceiver extends BroadcastReceiver
 }
 ```
 
-定义了BroadcastReceiver之后，您可以为其定义与特定操作，类别和数据匹配的filter。 为此，创建一个IntentFilter。 第一个片段显示了如何定义过滤器：
+定义了BroadcastReceiver之后，你可以为其定义与特定操作，类别和数据匹配的filter。 为此，创建一个IntentFilter。 第一个片段显示了如何定义过滤器：
 ```java
 // Class that displays photos
 public class DisplayActivity extends FragmentActivity {
@@ -1097,7 +1097,7 @@ public class DisplayActivity extends FragmentActivity {
                 statusIntentFilter);
         ...
 ```
-发送broadcast Intent不会启动或恢复activity。 即使您的应用程序在后台，Activity的BroadcastReceiver也会接收和处理Intent对象，但不会强制您的应用程序进入前台。 如果您想通知用户有关您的应用不可见的后台发生的事件，请使用[Notification](https://developer.android.google.cn/reference/android/app/Notification.html)。 切勿启动activity来响应传入的broadcast Intent。
+发送broadcast Intent不会启动或恢复activity。 即使你的应用程序在后台，Activity的BroadcastReceiver也会接收和处理Intent对象，但不会强制你的应用程序进入前台。 如果你想通知用户有关你的应用不可见的后台发生的事件，请使用[Notification](https://developer.android.google.cn/reference/android/app/Notification.html)。 切勿启动activity来响应传入的broadcast Intent。
 
 ## Bound services
 绑定service是client-server 接口中的server端。 它允许组件（例如activity）绑定到service，发送请求，接收响应以及执行进程间通信（IPC）。 绑定service通常仅在服务(绑定)另一个应用程序组件时才存在，并且不会无限期地在后台运行。
@@ -1106,8 +1106,8 @@ public class DisplayActivity extends FragmentActivity {
 ### The basics
 绑定service是Service类的一种实现，它允许其他应用程序与其绑定并与其交互。 要提供service绑定，必须实现onBind()回调方法。 此方法返回一个IBinder对象，该对象定义客户端可以用来与service交互的编程接口。
 #### Binding to started service
-如[service](https://developer.android.google.cn/guide/components/services.html)文档中所述，您可以创建已启动和绑定的service。 也就是说，您可以通过调用startService()来启动service，这将允许该service无限期运行，并且还可以通过调用bindService()来允许客户端绑定到该service。  
-如果您确实允许启动和绑定service，则在启动service后，当所有客户端都解除绑定时，系统不会销毁该service。 相反，您必须通过调用stopSelf（）或stopService（）显式停止该service。
+如[service](https://developer.android.google.cn/guide/components/services.html)文档中所述，你可以创建已启动和绑定的service。 也就是说，你可以通过调用startService()来启动service，这将允许该service无限期运行，并且还可以通过调用bindService()来允许客户端绑定到该service。  
+如果你确实允许启动和绑定service，则在启动service后，当所有客户端都解除绑定时，系统不会销毁该service。 相反，你必须通过调用stopSelf（）或stopService（）显式停止该service。
 
 尽管通常实现onBind()或onStartCommand()其中一个方法，但有时都需要实现两者。 例如，音乐播放器可能会发现允许其service无限期运行并提供绑定是很有用的。 这样，activity可以启动service以播放一些音乐，并且即使用户离开了应用程序，音乐也继续播放。 然后，当用户返回到应用程序时，activity可以绑定到service以重新获得对播放的控制。
 
@@ -1115,32 +1115,32 @@ public class DisplayActivity extends FragmentActivity {
 
 客户端通过调用bindService()绑定到service。 当这样做时，它必须提供ServiceConnection的实现，该实现监视与service的连接。 bindService()的返回值指示所请求的service是否存在以及是否允许客户端访问它。 当Android系统在客户端和service之间创建连接时，它将在ServiceConnection上调用onServiceConnected()。 onServiceConnected()方法包含一个IBinder参数，客户端随后可以使用该参数与绑定的service进行通信。
 
-您可以同时将多个客户端连接到service。 但是，系统缓存IBinderservice通信通道。 换句话说，仅当第一个客户端绑定时，系统才调用service的onBind()方法来生成IBinder。 然后，系统将同一IBinder提供给绑定到该service的所有其他客户端，而无需再次调用onBind()。
+你可以同时将多个客户端连接到service。 但是，系统缓存IBinderservice通信通道。 换句话说，仅当第一个客户端绑定时，系统才调用service的onBind()方法来生成IBinder。 然后，系统将同一IBinder提供给绑定到该service的所有其他客户端，而无需再次调用onBind()。
 
 当最后一个客户端与service解除绑定时，系统将销毁该service，除非该service也由startService()启动。
 
 绑定service实现中最重要的部分是定义onBind()回调方法返回的接口。 下一节讨论了定义service的IBinder接口的几种不同方法。
 ### Creating a bound service
-创建提供绑定的service时，必须提供IBinder，该IBinder提供客户端可以用来与service进行交互的编程接口。 您可以通过三种方式定义接口：
+创建提供绑定的service时，必须提供IBinder，该IBinder提供客户端可以用来与service进行交互的编程接口。 你可以通过三种方式定义接口：
 - Extending the Binder class  
-如果您的service是您自己的应用程序专用的，并且在与客户端在同一时期内运行（这是常见的），则应通过扩展Binder类并从onBind()返回它的实例来创建接口。 客户端收到Binder，并可以使用它直接访问Binder实现或service中可用的公共方法。  
-当您的service只是您自己的应用程序的后台工作程序时，这是首选技术。 您不会以这种方式创建接口的唯一原因是，您的service被其他应用程序使用或跨进程使用。
+如果你的service是你自己的应用程序专用的，并且在与客户端在同一时期内运行（这是常见的），则应通过扩展Binder类并从onBind()返回它的实例来创建接口。 客户端收到Binder，并可以使用它直接访问Binder实现或service中可用的公共方法。  
+当你的service只是你自己的应用程序的后台工作程序时，这是首选技术。 你不会以这种方式创建接口的唯一原因是，你的service被其他应用程序使用或跨进程使用。
 - Using a Messenger
-如果需要您的接口跨不同的进程工作，则可以使用Messenger来为service创建一个接口。 以这种方式，service定义了一个响应不同类型的Message对象的Handler。 该处理程序是Messenger的基础，后者可以与客户端共享IBinder，从而允许客户端使用Message对象将命令发送到service。 此外，客户端可以定义自己的Messenger，因此service可以将消息发送回去。  
-这是执行进程间通信(IPC)的最简单方法，因为Messenger将所有请求排队到一个线程中，因此您不必将service设计为线程安全的。
+如果需要你的接口跨不同的进程工作，则可以使用Messenger来为service创建一个接口。 以这种方式，service定义了一个响应不同类型的Message对象的Handler。 该处理程序是Messenger的基础，后者可以与客户端共享IBinder，从而允许客户端使用Message对象将命令发送到service。 此外，客户端可以定义自己的Messenger，因此service可以将消息发送回去。  
+这是执行进程间通信(IPC)的最简单方法，因为Messenger将所有请求排队到一个线程中，因此你不必将service设计为线程安全的。
 - Using AIDL  
-Android接口定义语言（AIDL）将对象分解为原语，操作系统可以理解这些原语，并跨进程将其编组以执行IPC。 先前使用Messenger的技术实际上是基于AIDL作为其基础结构。 如上所述，Messenger在单个线程中创建所有客户端请求的队列，因此service一次接收一个请求。 但是，如果您希望service同时处理多个请求，则可以直接使用AIDL。 在这种情况下，您的service必须是线程安全的并且具有多线程功能。  
+Android接口定义语言（AIDL）将对象分解为原语，操作系统可以理解这些原语，并跨进程将其编组以执行IPC。 先前使用Messenger的技术实际上是基于AIDL作为其基础结构。 如上所述，Messenger在单个线程中创建所有客户端请求的队列，因此service一次接收一个请求。 但是，如果你希望service同时处理多个请求，则可以直接使用AIDL。 在这种情况下，你的service必须是线程安全的并且具有多线程功能。  
 要直接使用AIDL，必须创建一个定义编程接口的.aidl文件。 Android SDK工具使用此文件生成一个抽象类，该抽象类实现了接口并处理IPC，然后可以在服务中进行扩展。
   - Note:  
-大多数应用程序不应使用AIDL创建绑定服务，因为它可能需要多线程功能，并且可能导致更复杂的实现。 因此，AIDL不适合大多数应用程序，并且本文档未讨论如何将其用于您的服务。 如果确定需要直接使用AIDL，请参阅AIDL文档。
+大多数应用程序不应使用AIDL创建绑定服务，因为它可能需要多线程功能，并且可能导致更复杂的实现。 因此，AIDL不适合大多数应用程序，并且本文档未讨论如何将其用于你的服务。 如果确定需要直接使用AIDL，请参阅AIDL文档。
 
 #### Extending the Binder class
-如果您的service仅由本地应用程序使用，并且不需要跨进程工作，则可以实现自己的Binder类，该类可为客户端提供对service中公共方法的直接访问。
+如果你的service仅由本地应用程序使用，并且不需要跨进程工作，则可以实现自己的Binder类，该类可为客户端提供对service中公共方法的直接访问。
 - Note:  
 仅当客户端和service位于同一应用程序和进程中（这是最常见的）时，此方法才有效。 例如，这对于需要将活动绑定到其自己的在后台播放音乐的service的音乐应用程序来说效果很好。 
 
 设置方法如下：
-1. 在您的service中，创建执行以下操作之一的Binder实例
+1. 在你的service中，创建执行以下操作之一的Binder实例
   - 包含客户端可以调用的公共方法。
   - 返回当前Service实例，该实例具有客户端可以调用的公共方法。
   - 返回服务托管的另一个类的实例，该类具有客户端可以调用的公共方法。
@@ -1243,11 +1243,11 @@ public class BindingActivity extends Activity {
 
 有关更多示例代码，请参见[ApiDemos](https://android.googlesource.com/platform/development/+/master/samples/ApiDemos)中的LocalService.java类和LocalServiceActivities.java类。
 #### Using a Messenger
-如果您需要service与远程进程进行通信，则可以使用Messenger来提供service的接口。 此技术使您无需使用AIDL即可执行进程间通信（IPC）。
+如果你需要service与远程进程进行通信，则可以使用Messenger来提供service的接口。 此技术使你无需使用AIDL即可执行进程间通信（IPC）。
 
 与 AIDL 相比，使用Messenger接口更简单，因为Messenger会将对service的所有调用排队。 纯AIDL接口将同时请求发送到service，然后该service必须处理多线程。
 
-对于大多数应用程序，该service不需要执行多线程，因此使用Messenger可使该service一次处理一个请求。 如果您的service是多线程很重要，请使用AIDL定义您的接口。  
+对于大多数应用程序，该service不需要执行多线程，因此使用Messenger可使该service一次处理一个请求。 如果你的service是多线程很重要，请使用AIDL定义你的接口。  
 
 这是有关如何使用Messenger的摘要：
 1. 该service实现了一个处理程序，该处理程序接收来自客户端的每个调用的回调。
@@ -1374,8 +1374,8 @@ public class ActivityMessenger extends Activity {
     }
 }
 ```
-请注意，此示例未显示service如何响应客户端。 如果您希望service做出响应，则还需要在客户端中创建Messenger。 当客户端收到onServiceConnected()回调时，它将向Message发送一条消息到service，该消息在send()方法的replyTo参数中包括客户端的Messenger。  
-您可以在[MessengerService.java](https://android.googlesource.com/platform/development/+/master/samples/ApiDemos/src/com/example/android/apis/app/MessengerService.java)（service）和[MessengerServiceActivities.java](https://android.googlesource.com/platform/development/+/master/samples/ApiDemos/src/com/example/android/apis/app/MessengerServiceActivities.java)（客户端）示例中看到有关如何提供双向消息传递的示例。
+请注意，此示例未显示service如何响应客户端。 如果你希望service做出响应，则还需要在客户端中创建Messenger。 当客户端收到onServiceConnected()回调时，它将向Message发送一条消息到service，该消息在send()方法的replyTo参数中包括客户端的Messenger。  
+你可以在[MessengerService.java](https://android.googlesource.com/platform/development/+/master/samples/ApiDemos/src/com/example/android/apis/app/MessengerService.java)（service）和[MessengerServiceActivities.java](https://android.googlesource.com/platform/development/+/master/samples/ApiDemos/src/com/example/android/apis/app/MessengerServiceActivities.java)（客户端）示例中看到有关如何提供双向消息传递的示例。
 ### Binding to a service
 应用程序组件（客户端）可以通过调用bindService()绑定到service。 然后，Android系统调用service的onBind()方法，该方法返回用于与service交互的IBinder。
 
@@ -1391,10 +1391,10 @@ public class ActivityMessenger extends Activity {
    当与service的连接意外丢失（例如，service崩溃或被杀死）时，Android系统会调用此方法。 客户端解除绑定时不调用此方法。
 2. 调用 bindService() 方法，传递 ServiceConnection 实现。
    - Note:  
-   如果该方法返回false，则您的客户端没有与该service的有效连接。 但是，您的客户端仍应调用unbindService(),否则，您的客户端将在service空闲时阻止其关闭。
-3. 当系统调用onServiceConnected()回调方法时，您可以使用接口定义的方法开始对service进行调用
+   如果该方法返回false，则你的客户端没有与该service的有效连接。 但是，你的客户端仍应调用unbindService(),否则，你的客户端将在service空闲时阻止其关闭。
+3. 当系统调用onServiceConnected()回调方法时，你可以使用接口定义的方法开始对service进行调用
 4. 要断开service，请调用unbindService()  
-如果在应用程序销毁客户端时您的客户端仍绑定到service，则销毁会导致客户端解除绑定。 更好的做法是在客户端与service交互完成后立即解除绑定。 这样可以关闭空闲service。 有关绑定和取消绑定的适当时间的更多信息，请参阅[Additional notes](https://developer.android.google.cn/guide/components/bound-services#Additional_Notes)。
+如果在应用程序销毁客户端时你的客户端仍绑定到service，则销毁会导致客户端解除绑定。 更好的做法是在客户端与service交互完成后立即解除绑定。 这样可以关闭空闲service。 有关绑定和取消绑定的适当时间的更多信息，请参阅[Additional notes](https://developer.android.google.cn/guide/components/bound-services#Additional_Notes)。
 
 以下示例通过扩展Binder类将客户端连接到上面创建的service，因此它所要做的就是将返回的IBinder强制转换为LocalService类并请求LocalService实例：
 ```java
@@ -1424,30 +1424,30 @@ bindService(intent, connection, Context.BIND_AUTO_CREATE);
 ```
 - bindService()的第一个参数是一个Intent，用于显式命名要绑定的service  
   - caution:  
-如果您使用Intent绑定到service，请使用显式Intent确保您的应用程序安全。 使用隐式Intent启动service会带来安全隐患，因为您无法确定哪个service将对Intent做出响应，并且用户无法看到哪个service会启动。 从Android 5.0（API级别21）开始，如果您以隐式Intent调用bindService（），系统将引发异常。
+如果你使用Intent绑定到service，请使用显式Intent确保你的应用程序安全。 使用隐式Intent启动service会带来安全隐患，因为你无法确定哪个service将对Intent做出响应，并且用户无法看到哪个service会启动。 从Android 5.0（API级别21）开始，如果你以隐式Intent调用bindService（），系统将引发异常。
 
 - 第二个参数是ServiceConnection对象。
 - 第三个参数是指示绑定选项的标志。 如果该service尚未启用，通常应为BIND_AUTO_CREATE才能创建该service。 其他可能的值是BIND_DEBUG_UNBIND和BIND_NOT_FOREGROUND，如果没有则为0。
 
 #### Additional notes
 以下是有关绑定到service的一些重要说明：
-- 您应该始终捕获DeadObjectException异常，该异常在连接断开时引发。 这是远程方法抛出的唯一异常。
+- 你应该始终捕获DeadObjectException异常，该异常在连接断开时引发。 这是远程方法抛出的唯一异常。
 - 对象是跨进程的引用计数。
 - 通常，在匹配客户端生命周期的绑定和解绑时刻时，将绑定和解除绑定配对，如以下示例中所述：
   - 如果仅在activity可见时需要与service交互，则应在onStart()期间绑定，而在onStop()期间取消绑定。
-  - 如果您希望activity即使在后台停止也能收到响应，则可以在onCreate()期间绑定，而在onDestroy()期间取消绑定。 请注意，这意味着您的activity需要在整个运行过程中都使用该service（即使在后台），因此，如果该service处于另一个进程中，则您将增加该进程的权重，因为系统更有可能会kill它。
+  - 如果你希望activity即使在后台停止也能收到响应，则可以在onCreate()期间绑定，而在onDestroy()期间取消绑定。 请注意，这意味着你的activity需要在整个运行过程中都使用该service（即使在后台），因此，如果该service处于另一个进程中，则你将增加该进程的权重，因为系统更有可能会kill它。
     - Note:  
-    通常，在activity的onResume()和onPause()期间，您通常不绑定和解除绑定，因为这些回调在每个生命周期转换时都会发生，因此应将在这些转换时发生的处理保持在最低限度。 此外，如果应用程序中的多个activity绑定到同一service，并且其中两个activity之间存在过渡，则该service可能会被破坏并重新创建，因为当前activity在下一个绑定之前（暂停期间）取消绑定（在暂停期间）（在恢复期间）。 activity文档中介绍了有关activity如何协调其生命周期的activity转换。
+    通常，在activity的onResume()和onPause()期间，你通常不绑定和解除绑定，因为这些回调在每个生命周期转换时都会发生，因此应将在这些转换时发生的处理保持在最低限度。 此外，如果应用程序中的多个activity绑定到同一service，并且其中两个activity之间存在过渡，则该service可能会被破坏并重新创建，因为当前activity在下一个绑定之前（暂停期间）取消绑定（在暂停期间）（在恢复期间）。 activity文档中介绍了有关activity如何协调其生命周期的activity转换。
 
 有关显示如何绑定到service的更多示例代码，请参见[ApiDemos](https://android.googlesource.com/platform/development/+/master/samples/ApiDemos)中的[RemoteService.java](https://android.googlesource.com/platform/development/+/master/samples/ApiDemos/src/com/example/android/apis/app/RemoteService.java)类。
 
 
 ### Managing the lifecycle of a bound service
-当service与所有客户端解除绑定时，Android系统会销毁该service（除非该service也是通过onStartCommand()启动的）。因此，如果service是纯粹的绑定service，则不必管理service的生命周期-Android系统会根据是否绑定到任何客户端来为您管理service。
+当service与所有客户端解除绑定时，Android系统会销毁该service（除非该service也是通过onStartCommand()启动的）。因此，如果service是纯粹的绑定service，则不必管理service的生命周期-Android系统会根据是否绑定到任何客户端来为你管理service。
 
 但是，如果选择实现onStartCommand()回调方法，则必须显式停止该service，因为现在认为该service已启动。在这种情况下，service将一直运行，直到该service通过stopSelf()停止自身运行或其他组件调用stopService()为止，无论该service是否绑定到任何客户端。
 
-此外，如果您的service已启动并接受绑定，则当系统调用您的onUnbind()方法时，如果您希望在下一次客户端绑定到该service时收到对onRebind()的调用，则可以选择返回true。 onRebind()返回void，但是客户端仍在其onServiceConnected()回调中接收IBinder。下图说明了这种生命周期的逻辑。
+此外，如果你的service已启动并接受绑定，则当系统调用你的onUnbind()方法时，如果你希望在下一次客户端绑定到该service时收到对onRebind()的调用，则可以选择返回true。 onRebind()返回void，但是客户端仍在其onServiceConnected()回调中接收IBinder。下图说明了这种生命周期的逻辑。
 ![avatar](./image/service_binding_tree_lifecycle.png)
 
 有关已启动service的生命周期的更多信息，请参阅[Service](https://developer.android.google.cn/guide/components/services.html#Lifecycle)文档。
@@ -1457,7 +1457,7 @@ Android应用程序可以从Android系统和其他Android应用程序发送或�
 
 应用可以注册以接收特定的broadcast。发送broadcast后，系统会自动将broadcast路由到已订阅接收特定broadcast类型的应用。
 
-一般来说，broadcast可用作跨应用程序和普通用户流之外的消息传递系统。但是，您必须小心，不要滥用机会在后台响应broadcast和运行作业，这可能会导致系统性能下降，如以下视频所述。
+一般来说，broadcast可用作跨应用程序和普通用户流之外的消息传递系统。但是，你必须小心，不要滥用机会在后台响应broadcast和运行作业，这可能会导致系统性能下降，如以下视频所述。
 ## About system broadcasts
 当发生各种系统事件（例如，系统切换为飞行模式或从飞行模式退出）时，系统会自动发送broadcast。 系统broadcast将发送到已订阅接收事件的所有应用。
 
@@ -1468,13 +1468,13 @@ broadcast消息本身包装在一个Intent对象中，该对象的操作字符�
 有关系统broadcast操作的完整列表，请参阅Android SDK中的BROADCAST_ACTIONS.TXT文件。 每个broadcast动作都有一个与之关联的常数字段。 例如，常量ACTION_AIRPLANE_MODE_CHANGED的值为android.intent.action.AIRPLANE_MODE。 每个broadcast操作的文档都可以在其关联的常量字段中找到。
 
 ### Changes to system broadcasts
-随着Android平台的发展，它会定期更改系统broadcast的行为。 如果您的应用定位到Android 7.0（API level 24）或更高版本，或者安装在运行Android 7.0或更高版本的设备上，请记住以下更改。
+随着Android平台的发展，它会定期更改系统broadcast的行为。 如果你的应用定位到Android 7.0（API level 24）或更高版本，或者安装在运行Android 7.0或更高版本的设备上，请记住以下更改。
 - Android 9  
 从Android 9（API级别28）开始，NETWORK_STATE_CHANGED_ACTION广播不会接收到有关用户位置或个人身份数据的信息。  
-此外，如果您的应用安装在运行Android 9或更高版本的设备上，则来自Wi-Fi的系统广播不包含SSID，BSSID，连接信息或扫描结果。 要获取此信息，请调用getConnectionInfo()。
+此外，如果你的应用安装在运行Android 9或更高版本的设备上，则来自Wi-Fi的系统广播不包含SSID，BSSID，连接信息或扫描结果。 要获取此信息，请调用getConnectionInfo()。
 - Android 8.0  
 从Android 8.0（API级别26）开始，系统对manifest声明的接收者施加了其他限制。  
-如果您的应用程序针对Android 8.0或更高版本，则您不能使用清单为大多数隐式broadcast（不专门针对您的应用程序的broadcast）声明接收方。 当用户积极使用您的应用时，您仍然可以使用上下文注册的接收器。
+如果你的应用程序针对Android 8.0或更高版本，则你不能使用清单为大多数隐式broadcast（不专门针对你的应用程序的broadcast）声明接收方。 当用户积极使用你的应用时，你仍然可以使用上下文注册的接收器。
 - Android 7  
 Android 7.0（API级别24）及更高版本不会发送以下系统broadcast：
   - ACTION_NEW_PICTURE
@@ -1484,11 +1484,11 @@ Android 7.0（API级别24）及更高版本不会发送以下系统broadcast：
 ## Receiving broadcasts
 应用可以通过两种方式接收broadcast：通过清单声明的receivers和上下文注册的receivers.
 ### Manifest-declared receivers
-如果您在清单中声明了broadcastreceiver ，则在发送broadcast时，系统会启动您的应用程序（如果该应用程序尚未运行）。
+如果你在清单中声明了broadcastreceiver ，则在发送broadcast时，系统会启动你的应用程序（如果该应用程序尚未运行）。
 - Note: 
-如果您的应用程序的目标是API级别26或更高级别，则除少数一些不受此限制的隐式broadcast外，您不能使用manifest为隐式broadcast（不专门针对您的应用的broadcast）声明接收方。 在大多数情况下，您可以使用scheduled jobs。
+如果你的应用程序的目标是API级别26或更高级别，则除少数一些不受此限制的隐式broadcast外，你不能使用manifest为隐式broadcast（不专门针对你的应用的broadcast）声明接收方。 在大多数情况下，你可以使用scheduled jobs。
 要在manifest中声明广播接收器，请执行以下步骤：
-1. 在您的应用manifest中指定<receiver>元素。
+1. 在你的应用manifest中指定<receiver>元素。
 ```xml
 <receiver android:name=".MyBroadcastReceiver"  android:exported="true">
     <intent-filter>
@@ -1512,9 +1512,9 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         }
     }
 ```
-安装应用程序后，系统软件包管理器将注册receiver 。 然后，receiver 将成为您应用程序的单独入口点，这意味着系统可以启动应用程序并在应用程序当前未运行时传送broadcast。
+安装应用程序后，系统软件包管理器将注册receiver 。 然后，receiver 将成为你应用程序的单独入口点，这意味着系统可以启动应用程序并在应用程序当前未运行时传送broadcast。
 
-系统创建一个新的BroadcastReceiver组件对象，以处理其接收的每个broadcast。 该对象仅在对onReceive（Context，Intent）的调用期间有效。 一旦您的代码从该方法返回，系统就会认为该组件不再处于活动状态。
+系统创建一个新的BroadcastReceiver组件对象，以处理其接收的每个broadcast。 该对象仅在对onReceive（Context，Intent）的调用期间有效。 一旦你的代码从该方法返回，系统就会认为该组件不再处于活动状态。
 
 ### Context-registered receivers
 要向上下文注册receiver ，请执行以下步骤：
@@ -1530,18 +1530,18 @@ IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 ```
 - Note:
 要注册local broadcasts, 请改为调用[LocalBroadcastManager.registerReceiver(BroadcastReceiver, IntentFilter)](https://developer.android.google.cn/reference/androidx/localbroadcastmanager/content/LocalBroadcastManager.html#registerReceiver(android.content.BroadcastReceiver,%20android.content.IntentFilter))。
-上下文注册的receiver 只要其注册上下文有效就可以接收broadcast。 例如，如果您在Activity上下文中注册，则只要该活动未销毁，您就会收到broadcast。 如果您在“应用程序”上下文中注册，则只要该应用程序正在运行，您就会收到broadcast。
-3.要停止接收broadcast，请调用unregisterReceiver(android.content.BroadcastReceiver)。 当您不再需要receiver 或上下文不再有效时，请确保注销它。
+上下文注册的receiver 只要其注册上下文有效就可以接收broadcast。 例如，如果你在Activity上下文中注册，则只要该活动未销毁，你就会收到broadcast。 如果你在“应用程序”上下文中注册，则只要该应用程序正在运行，你就会收到broadcast。
+3.要停止接收broadcast，请调用unregisterReceiver(android.content.BroadcastReceiver)。 当你不再需要receiver 或上下文不再有效时，请确保注销它。
 
-请注意在何处注册和注销receiver ，例如，如果使用活动的上下文在onCreate(Bundle)中注册了receiver ，则应在onDestroy()中将其注销，以防止receiver 泄漏出活动上下文。 如果在onResume()中注册了receiver ，则应在onPause()中将其注销，以防止多次注册(如果您不想在暂停时接收broadcast，这样可以减少不必要的系统开销)。 不要在onSaveInstanceState(Bundle)中注销，因为如果用户移回历history stack，则不会调用此方法。
+请注意在何处注册和注销receiver ，例如，如果使用活动的上下文在onCreate(Bundle)中注册了receiver ，则应在onDestroy()中将其注销，以防止receiver 泄漏出活动上下文。 如果在onResume()中注册了receiver ，则应在onPause()中将其注销，以防止多次注册(如果你不想在暂停时接收broadcast，这样可以减少不必要的系统开销)。 不要在onSaveInstanceState(Bundle)中注销，因为如果用户移回历history stack，则不会调用此方法。
 ### Effects on process state
 BroadcastReceiver的状态(无论它是否正在运行)会影响其包含进程的状态，进而会影响其被系统杀死的可能性。 例如，当某个进程执行接收方时(即当前正在其onReceive()方法中运行代码)，则该进程被视为前台进程。 该系统使进程保持运行，除非在内存压力过大的情况下。
 
-但是，一旦您的代码从onReceive()返回，BroadcastReceiver将不再处于活动状态。 接收方的宿主进程仅与其中运行的其他应用程序组件一样重要。 如果该进程仅托管一个manifest 声明的接收方(用户从未与之交互或最近未与之交互的应用程序的常见情况)，则从onReceive()返回后，系统会认为其进程为低优先级进程，并且可能 杀死它以使资源可用于其他更重要的过程。
+但是，一旦你的代码从onReceive()返回，BroadcastReceiver将不再处于活动状态。 接收方的宿主进程仅与其中运行的其他应用程序组件一样重要。 如果该进程仅托管一个manifest 声明的接收方(用户从未与之交互或最近未与之交互的应用程序的常见情况)，则从onReceive()返回后，系统会认为其进程为低优先级进程，并且可能 杀死它以使资源可用于其他更重要的过程。
 
-因此，您不应从broadcast receiver启动长时间运行的后台线程。 在onReceive()之后，系统可以随时终止进程以回收内存，这样做可以终止在进程中运行的生成线程。 为了避免这种情况，您应该调用goAsync()(如果您需要更多时间在后台线程中处理broadcast)，或者使用JobScheduler从接收方安排JobService，以便系统知道该进程继续执行活动 工作。 有关更多信息，请参见[Processes and Application Life Cycle](https://developer.android.google.cn/guide/topics/processes/process-lifecycle.html)。
+因此，你不应从broadcast receiver启动长时间运行的后台线程。 在onReceive()之后，系统可以随时终止进程以回收内存，这样做可以终止在进程中运行的生成线程。 为了避免这种情况，你应该调用goAsync()(如果你需要更多时间在后台线程中处理broadcast)，或者使用JobScheduler从接收方安排JobService，以便系统知道该进程继续执行活动 工作。 有关更多信息，请参见[Processes and Application Life Cycle](https://developer.android.google.cn/guide/topics/processes/process-lifecycle.html)。
 
-以下代码片段显示了一个broadcast receiver ，该broadcast receiver 使用goAsync()标记onReceive()完成后需要更多时间才能完成。 如果您要在onReceive()中完成的工作太长而导致UI线程丢失一帧(> 16ms)，这使其特别适合于后台线程。。
+以下代码片段显示了一个broadcast receiver ，该broadcast receiver 使用goAsync()标记onReceive()完成后需要更多时间才能完成。 如果你要在onReceive()中完成的工作太长而导致UI线程丢失一帧(> 16ms)，这使其特别适合于后台线程。。
 ```java
 public class MyBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = "MyBroadcastReceiver";
@@ -1586,7 +1586,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 Android为应用程序提供了三种发送broadcast的方式：
 - sendOrderedBroadcast(Intent，String)方法一次将broadcast发送到一个receiver 。 当每个receiver 轮流执行时，它可以将结果传播到下一个receiver ，或者可以完全中止broadcast，从而不会将其传递给其他receiver 。 可以使用匹配的intent-filter的android：priority属性控制receiver 的运行顺序； 具有相同优先级的receiver 将以任意顺序运行。
 - sendBroadcast(Intent)方法以不确定的顺序将广播发送到所有receiver 。 这称为正常广播。 这更有效，但是意味着receiver 无法读取其他receiver 的结果，传播从广播接收的数据或中止广播。
-- LocalBroadcastManager.sendBroadcast方法将broadcast发送到与发送者在同一应用程序中的receiver 。 如果不需要跨应用程序发送broadcast，请使用 local broadcast。 实施效率更高(无需进程间通信)，您无需担心与其他应用程序能够接收或发送broadcast有关的任何安全问题。
+- LocalBroadcastManager.sendBroadcast方法将broadcast发送到与发送者在同一应用程序中的receiver 。 如果不需要跨应用程序发送broadcast，请使用 local broadcast。 实施效率更高(无需进程间通信)，你无需担心与其他应用程序能够接收或发送broadcast有关的任何安全问题。
 
 以下代码段演示了如何通过创建Intent并调用sendBroadcast(Intent)来发送broadcast.
 ```java
@@ -1595,13 +1595,13 @@ intent.setAction("com.example.broadcast.MY_NOTIFICATION");
 intent.putExtra("data","Notice me senpai!");
 sendBroadcast(intent);
 ```
-broadcast消息包装在Intent对象中。 意向的操作字符串必须提供应用程序的Java包名称语法，并唯一标识broadcast事件。 您可以使用putExtra(String，Bundle)将其他信息附加到Intent。 您还可以通过调用该Intent上的setPackage(String)将broadcast限制为同一组织中的一组应用程序。
+broadcast消息包装在Intent对象中。 意向的操作字符串必须提供应用程序的Java包名称语法，并唯一标识broadcast事件。 你可以使用putExtra(String，Bundle)将其他信息附加到Intent。 你还可以通过调用该Intent上的setPackage(String)将broadcast限制为同一组织中的一组应用程序。
 - Note:
-尽管使用startActivity(Intent)将Intent用于发送broadcast和启动activity，但是这些动作是完全无关的。 broadcast receiver看不到或捕获用于启动 activity的Intent； 同样，当您broadcast Intent时，您将找不到或启动activity。
+尽管使用startActivity(Intent)将Intent用于发送broadcast和启动activity，但是这些动作是完全无关的。 broadcast receiver看不到或捕获用于启动 activity的Intent； 同样，当你broadcast Intent时，你将找不到或启动activity。
 ## Restricting broadcasts with permissions
-permissions 允许您将broadcast限制为拥有某些权限的应用程序集。 您可以对broadcast的sender或receiver 实施限制.
+permissions 允许你将broadcast限制为拥有某些权限的应用程序集。 你可以对broadcast的sender或receiver 实施限制.
 ### Sending with permissions
-当您调用sendBroadcast(Intent，String)或sendOrderedBroadcast(Intent，String，BroadcastReceiver，Handler，int，String，Bundle)时，您可以指定一个权限参数。 只有请求了manifest中带有标签的许可的receiver (如果危险则随后被授予许可)才能接收broadcast。 例如，以下代码发送broadcast：
+当你调用sendBroadcast(Intent，String)或sendOrderedBroadcast(Intent，String，BroadcastReceiver，Handler，int，String，Bundle)时，你可以指定一个权限参数。 只有请求了manifest中带有标签的许可的receiver (如果危险则随后被授予许可)才能接收broadcast。 例如，以下代码发送broadcast：
 ```java
 sendBroadcast(new Intent("com.example.NOTIFY"),
               Manifest.permission.SEND_SMS);
@@ -1610,12 +1610,12 @@ sendBroadcast(new Intent("com.example.NOTIFY"),
 ```xml
 <uses-permission android:name="android.permission.SEND_SMS"/>
 ```
-您可以指定现有的系统权限（例如SEND_SMS），也可以使用<permission>元素定义自定义权限。 有关一般权限和安全性的信息，请看 [System Permissions](https://developer.android.google.cn/guide/topics/security/permissions.html).
+你可以指定现有的系统权限（例如SEND_SMS），也可以使用<permission>元素定义自定义权限。 有关一般权限和安全性的信息，请看 [System Permissions](https://developer.android.google.cn/guide/topics/security/permissions.html).
 - Note:  
 安装应用程序后，将注册自定义权限。 定义自定义权限的应用程序必须在使用它的应用程序之前安装。
 ### Receiving with permissions
-如果您在注册broadcast接收器时指定了权限参数（无论是使用registerReceiver（BroadcastReceiver，IntentFilter，String，Handler）还是在manifest中的<receiver>标记中标记），则只有在manifest使用<uses-permission>请求许可的broadcast者 （如果有危险，则随后被授予许可？）可以将Intent发送给接收者。
-例如，假设您的接收应用程序具有声明manifest的receiver，如下所示：
+如果你在注册broadcast接收器时指定了权限参数（无论是使用registerReceiver（BroadcastReceiver，IntentFilter，String，Handler）还是在manifest中的<receiver>标记中标记），则只有在manifest使用<uses-permission>请求许可的broadcast者 （如果有危险，则随后被授予许可？）可以将Intent发送给接收者。
+例如，假设你的接收应用程序具有声明manifest的receiver，如下所示：
 ```xml
 <receiver android:name=".MyBroadcastReceiver"
           android:permission="android.permission.SEND_SMS">
@@ -1624,7 +1624,7 @@ sendBroadcast(new Intent("com.example.NOTIFY"),
     </intent-filter>
 </receiver>
 ```
-或者您的接收应用程序具有上下文注册的receiver，如下所示：
+或者你的接收应用程序具有上下文注册的receiver，如下所示：
 ```java
 IntentFilter filter = new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED);
 registerReceiver(receiver, filter, Manifest.permission.SEND_SMS, null );
@@ -1635,24 +1635,778 @@ registerReceiver(receiver, filter, Manifest.permission.SEND_SMS, null );
 ```
 ## Security considerations and best practices
 以下是发送和接收broadcast的一些安全注意事项和最佳做法：
-- 如果您不需要将broadcast发送到应用程序外部的组件，请使用支持库中的LocalBroadcastManager发送和接收本地broadcast。 LocalBroadcastManager效率更高（无需进程间通信），使您可以避免考虑与其他能够接收或发送broadcast的应用程序有关的安全问题。 local broadcast可用作应用程序中的通用发布/订阅事件总线，而不会产生系统范围broadcast的任何开销。
+- 如果你不需要将broadcast发送到应用程序外部的组件，请使用支持库中的LocalBroadcastManager发送和接收本地broadcast。 LocalBroadcastManager效率更高（无需进程间通信），使你可以避免考虑与其他能够接收或发送broadcast的应用程序有关的安全问题。 local broadcast可用作应用程序中的通用发布/订阅事件总线，而不会产生系统范围broadcast的任何开销。
 - 如果许多应用程序已经注册接收manifest中的同一broadcast，则可能导致系统启动许多应用程序，从而对设备性能和用户体验产生重大影响。 为了避免这种情况，宁愿使用上下文注册而不是manifest声明。 有时，Android系统本身会强制使用上下文注册的接收器。 例如，CONNECTIVITY_ACTION broadcast仅传递给上下文注册的接收器。
-- 不要使用隐式Intent broadcast敏感信息。 任何注册接收broadcast的应用都可以读取该信息。 有三种方法可以控制谁可以接收您的broadcast：
-  - 您可以在发送broadcast时指定权限。
-  - 在Android 4.0及更高版本中，您可以在发送broadcast时使用setPackage（String）指定一个程序包。 系统将broadcast限制为与软件包匹配的一组应用程序。
+- 不要使用隐式Intent broadcast敏感信息。 任何注册接收broadcast的应用都可以读取该信息。 有三种方法可以控制谁可以接收你的broadcast：
+  - 你可以在发送broadcast时指定权限。
+  - 在Android 4.0及更高版本中，你可以在发送broadcast时使用setPackage（String）指定一个程序包。 系统将broadcast限制为与软件包匹配的一组应用程序。
   - 你可以使用LocalBroadcastManager 发送本地broadcast。
-- 当您注册receiver 时，任何应用都可以将潜在的恶意broadcast发送到您的应用的receiver 。 有三种方法可以限制您的应用接收的broadcast
-  - 您可以在注册broadcast recevier时指定权限
+- 当你注册receiver 时，任何应用都可以将潜在的恶意broadcast发送到你的应用的receiver 。 有三种方法可以限制你的应用接收的broadcast
+  - 你可以在注册broadcast recevier时指定权限
   - 对于manifest声明的receiver，可以在manifest中将android：exported属性设置为"false"。 receiver不会从应用程序外部的源接收broadcast。
-  - 您可以使用LocalBroadcastManager将自己限制为仅local broadcast.
-- broadcast action的名称空间是全局的。 确保将动作名称和其他字符串写在您拥有的名称空间中，否则可能会无意间与其他应用冲突
-- 因为receiver 的onReceive(Context，Intent)方法在主线程上运行，所以它应该执行并快速返回。 如果您需要执行长时间运行的工作，请小心生成线程或启动后台服务，因为在onReceive()返回之后，系统可能会杀死整个进程。 有关更多信息，请参见[Effect on process state](https://developer.android.google.cn/guide/components/broadcasts#effects-on-process-state)。要执行长期运行的工作，我们建议：
-  - 在receiver 的onReceive()方法中调用goAsync()，并将BroadcastReceiver.PendingResult传递给后台线程。 从onReceive()返回后，这可使broadcast保持活动状态。 但是，即使采用这种方法，系统也希望您能够非常快地完成broadcast(不到10秒)。 它的确使您可以将工作移至另一个线程，以避免使主线程出现故障。
+  - 你可以使用LocalBroadcastManager将自己限制为仅local broadcast.
+- broadcast action的名称空间是全局的。 确保将动作名称和其他字符串写在你拥有的名称空间中，否则可能会无意间与其他应用冲突
+- 因为receiver 的onReceive(Context，Intent)方法在主线程上运行，所以它应该执行并快速返回。 如果你需要执行长时间运行的工作，请小心生成线程或启动后台服务，因为在onReceive()返回之后，系统可能会杀死整个进程。 有关更多信息，请参见[Effect on process state](https://developer.android.google.cn/guide/components/broadcasts#effects-on-process-state)。要执行长期运行的工作，我们建议：
+  - 在receiver 的onReceive()方法中调用goAsync()，并将BroadcastReceiver.PendingResult传递给后台线程。 从onReceive()返回后，这可使broadcast保持活动状态。 但是，即使采用这种方法，系统也希望你能够非常快地完成broadcast(不到10秒)。 它的确使你可以将工作移至另一个线程，以避免使主线程出现故障。
   - 使用 JobScheduler,详情请看[Inteligent Job Scheduling](https://developer.android.google.cn/topic/performance/scheduling.html).
 - 不要在broadcast receiver中启动activity，因为这回使得用户体验很差，尤其是有多个broadcast receiver的时候。这种时候，请考虑使用[notification](https://developer.android.google.cn/guide/topics/ui/notifiers/notifications.html)。
 
-# Fragment
+# Fragments
+## Overview
+Fragment表示FragmentActivity中的行为或用户界面的一部分。你可以在一个activity中组合多个Fragment以构建多窗格UI，并在多个activity中重用一个Fragment。你可以将Fragment视为activity的模块化部分，该Fragment具有自己的生命周期，接收其自己的输入事件，并且可以在activity运行时对其进行添加或删除（类似于“子activity”，你可以在不同的activity中重复使用）。
 
+Fragment必须始终托管在activity中，并且Fragment的生命周期直接受到宿主activity的生命周期的影响。例如，activity被暂停时，其中的所有Fragment也将暂停；activity被销毁时，所有Fragment也将被销毁。但是，当一个activity正在运行时（它处于恢复的生命周期状态），你可以独立地操纵每个Fragment，例如添加或删除它们。执行此类Fragment事务时，还可以将其添加到由activity管理的后台堆栈中-activity中的每个后台堆栈条目都是发生的Fragment事务的记录。后退堆栈允许用户通过按“后退”按钮来反转Fragment事务（向后导航）。
 
+当你将Fragment添加为activity布局的一部分时，它位于activity视图层次结构内的ViewGroup中，并且该Fragment定义了自己的视图布局。你可以通过在activity的布局文件中将该Fragment声明为<fragment>元素，或者在你的应用程序代码中将该Fragment添加到现有的ViewGroup中，从而将Fragment插入到你的activity布局中。
 
+本文档介绍如何构建你的应用程序以使用Fragment，包括Fragment如何在添加到activity的后堆栈中时保持其状态，与activity以及activity中的其他Fragment共享事件，对activity的应用栏做出贡献等等。
 
+有关处理生命周期的信息，包括有关最佳实践的指南，请参阅以下资源：
+- [Handling Lifecycles with Lifecycle-Aware Components](https://developer.android.google.cn/topic/libraries/architecture/lifecycle.html)
+- [Guide to App Architecture](https://developer.android.google.cn/topic/libraries/architecture/guide.html)
+- [Supporting Tablets and Handsets](https://developer.android.google.cn/guide/practices/tablets-and-handsets.html)
+### Design Philosophy
+Android在Android 3.0（API级别11）中引入了Fragment，主要是为了在大屏幕（例如平板电脑）上支持更多动态和灵活的UI设计。由于平板电脑的屏幕比手机的屏幕大得多，因此有更多的空间来组合和交换UI组件。Fragment允许进行此类设计，而无需你管理视图层次结构的复杂更改。通过将activity的布局分成多个Fragment，你可以在运行时修改activity的外观并将这些更改保存在由activity管理的后台堆栈中。现在，可以通过Fragment支持库广泛使用它们。
+
+例如，新闻应用程序可以使用一个Fragment在左侧显示文章列表，而另一个Fragment在右侧显示文章—两个Fragment并排出现在一个activity中，每个Fragment都有自己的生命周期集回调方法并处理自己的用户输入事件。因此，如图1的数位板布局所示，用户可以选择一个文章并在同一activity中全部阅读，而不是使用一个activity来选择文章，而不必使用另一个activity来阅读文章。
+
+你应将每个Fragment设计为模块化和可重用的activity组件。也就是说，由于每个Fragment都通过自己的生命周期回调定义了自己的布局和行为，因此你可以在多个activity中包含一个Fragment，因此你应该进行重用设计，并避免直接从另一个Fragment操纵一个Fragment。这尤其重要，因为模块化Fragment允许你更改Fragment组合以适应不同的屏幕尺寸。在设计支持平板电脑和手机的应用程序时，你可以在不同的布局配置中重复使用Fragment，以根据可用的屏幕空间优化用户体验。例如，在一部手机上，当一个以上的activity无法容纳一个以上的Fragment时，可能有必要将Fragment分开以提供单窗格UI。
+
+例如，为继续新闻应用程序示例，当在平板电脑大小的设备上运行时，该应用程序可以在activityA中嵌入两个Fragment。 但是，在手机大小的屏幕上，两个Fragment都没有足够的空间，因此activityA仅包含文章列表中的Fragment，并且当用户选择文章时，它会启动activityB，其中包含要读取的第二个Fragment 文章。 因此，该应用程序通过重复使用不同组合的Fragment来支持平板电脑和手机，如下图所示。
+![avatar](./image/fragments.png)
+
+有关为不同的屏幕配置使用不同的Fragment组合设计应用程序的更多信息，请参见[Screen Compatibility Overview](https://developer.android.google.cn/guide/practices/screens_support.html)。
+
+### Creating Fragment
+要创建Fragment，你必须创建Fragment的子类（或其现有子类）。 Fragment类的代码看起来很像Activity。 它包含类似于activity的回调方法，例如onCreate（），onStart（），onPause（）和onStop（）。 实际上，如果你要转换现有的Android应用程序以使用Fragment，则只需将代码从activity的回调方法移到Fragment的相应回调方法中即可。
+
+通常，你应该至少实现以下生命周期方法：
+- onCreate()  
+创建Fragment时，系统将调用此方法。 在实现中，你应该初始化要暂停或停止然后恢复的Fragment要保留的Fragment的基本组件。
+- onCreateView()  
+当Fragment第一次绘制其用户界面时，系统将调用此方法。 要为Fragment绘制UI，必须从此方法返回一个View，它是Fragment布局的根。 如果Fragment不提供UI，则可以返回null。
+- onPause()
+系统将此方法称为用户离开该Fragment的第一个标记（尽管并不总是意味着该Fragment已被破坏）。 通常，你应该在此处提交应保留在当前用户会话之后的所有更改（因为用户可能不会回来）。  
+
+大多数应用程序应该为每个片段至少实现这三种方法，但是你还应该使用其他几种回调方法来处理片段生命周期的各个阶段。 所有的生命周期的回调方法的详细解释会在[Handling the Fragment Lifecycle](https://developer.android.google.cn/guide/components/fragments?hl=en#Lifecycle).  
+请注意，实现从属组件生命周期操作的代码应放置在组件本身中，而不是直接放置在片段回调实现中。 请参阅[Handling Lifecycles with Lifecycle-Aware Components](https://developer.android.google.cn/topic/libraries/architecture/lifecycle.html)，以了解如何让组件具有lifecycle-aware.
+
+你可能还需要扩展一些子类，而不是基础Fragment类：
+- DialogFragment  
+显示一个浮动对话框。 使用此类创建对话框是在Activity类中使用对话框帮助器方法的一种很好的替代方法，因为你可以将Fragment对话框合并到由活动管理的Fragment的后堆栈中，从而允许用户返回到已解散的Fragment。 
+- ListFragment  
+显示由适配器（例如SimpleCursorAdapter）管理的项目列表，类似于ListActivity。 它提供了几种用于管理列表视图的方法，例如用于处理单击事件的onListItemClick（）回调。 （请注意，显示列表的首选方法是使用RecyclerView而不是ListView。在这种情况下，你需要创建一个在其布局中包含RecyclerView的片段。请参阅使用RecyclerView创建列表以了解方法。）
+- PreferenceFragmentCompat
+将 preference 对象的层次结构显示为列表，这用于为你的应用程序[create a settings screen](https://developer.android.google.cn/guide/topics/ui/settings.html)
+
+#### Adding a user interface
+Fragment通常用作活动用户界面的一部分，并为活动贡献自己的布局。
+
+要提供Fragment的布局，你必须实现onCreateView（）回调方法，Android系统在Fragment绘制其布局时会调用该方法。 此方法的实现必须返回一个View，它是Fragment布局的根。
+- Note  
+如果你的Fragment是ListFragment的子类，则默认实现从onCreateView（）返回ListView，因此你无需实现它。  
+
+要从onCreateView（）返回布局，可以从XML中定义的布局资源中将其充气。 为了帮助你做到这一点，onCreateView（）提供了一个LayoutInflater对象。
+举个例子，下面就是一个Fragment 的子类从 example_fragment.xml 文件中加载布局
+
+```java
+public static class ExampleFragment extends Fragment {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.example_fragment, container, false);
+    }
+}
+```
+
+- Note:  
+在前面的示例中，R.layout.example_fragment是对保存在应用程序资源中的名为example_fragment.xml的布局资源的引用。 有关如何在XML中创建布局的信息，请参见[User Interface](https://developer.android.google.cn/guide/topics/ui/index.html)。
+
+传递给onCreateView（）的容器参数是父ViewGroup（来自活动的布局），在其中插入了Fragment布局。 savedInstanceState参数是一个Bundle，如果正在恢复该Fragment，则它将提供有关该Fragment的先前实例的数据（有关恢复状态的详细信息，请参见[Handling the Fragment Lifecycle](https://developer.android.google.cn/guide/components/fragments?hl=en#Lifecycle)一节）。
+
+inflate（）方法采用三个参数：
+- 要膨胀的布局的资源ID。
+- ViewGroup将成为展开布局的父级。 传递容器对于系统将布局参数应用到膨胀布局的根视图很重要，该根视图由其要进入的父视图指定。
+- 一个布尔值，指示在充气期间是否应将充气布局附加到ViewGroup（第二个参数）。 （在这种情况下，这是错误的，因为系统已经在将膨胀的布局插入到容器中，如果传递true，则将在最终布局中创建冗余视图组。）
+
+现在，你已经了解了如何创建提供布局的Fragment。 接下来，你需要将Fragment添加到你的Activity中。
+#### Adding a fragment to an activity
+通常，Fragment为主机activity贡献了一部分UI，该activity作为activity的整体视图层次结构的一部分被嵌入。 你可以通过两种方式向activity布局添加Fragment
+#####  Declare the fragment inside the activity's layout file 
+在这种情况下，你可以为Fragment指定布局属性，就好像它是一个视图一样。例如，下面是一个包含两个Fragment的活动的布局文件:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <fragment android:name="com.example.news.ArticleListFragment"
+            android:id="@+id/list"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    <fragment android:name="com.example.news.ArticleReaderFragment"
+            android:id="@+id/viewer"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+</LinearLayout>
+```
+fragment中的android：name属性指定要在布局中实例化的Fragment类。  
+系统创建此activity布局时，将实例化布局中指定的每个Fragment，并为每个Fragment调用onCreateView（）方法，以检索每个Fragment的布局。 系统直接将Fragment返回的视图插入到<fragment>元素的位置。
+  - Note:  
+每个Fragment都需要一个唯一的标识符，如果重新启动activity，系统可以使用该标识符来还原该Fragment（你可以使用该标识符来捕获该Fragment以执行事务，例如将其删除）。 提供FragmentID的方法有两种：
+    - 为android：id属性提供唯一的ID。
+    - 为android：tag属性提供唯一的字符串。
+
+#####  programmatically add the fragment to an existing ViewGroup
+activity运行时，你可以随时将Fragment添加到activity布局中。 你只需要指定一个放置Fragment的ViewGroup。  
+要在activity中进行Fragment事务（例如添加，删除或替换Fragment），必须使用FragmentTransaction中的API。 你可以像这样从FragmentActivity获取FragmentTransaction的实例
+```java
+FragmentManager fragmentManager = getSupportFragmentManager();
+FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+```
+然后，你可以使用add（）方法添加一个Fragment，指定要添加的Fragment以及要在其中插入的视图。 例如
+```java
+ExampleFragment fragment = new ExampleFragment();
+fragmentTransaction.add(R.id.fragment_container, fragment);
+fragmentTransaction.commit();
+```
+传递给add（）的第一个参数是应在其中放置Fragment的ViewGroup，由资源ID指定，第二个参数是要添加的Fragment。
+使用FragmentTransaction进行更改后，必须调用commit（）才能使更改生效.
+### Managing Fragments
+要管理activity中的Fragment，你需要使用FragmentManager。 要获取它，请从你的activity中调用getSupportFragmentManager（）。
+
+你可以使用FragmentManager做一些事情：
+
+使用findFragmentById（）（用于在activity布局中提供UI的Fragment）或findFragmentByTag（）（用于提供或不提供UI的Fragment）获取activity中存在的Fragment。
+使用popBackStack（）从后台堆栈弹出Fragment（由用户模拟Back命令）。
+使用addOnBackStackChangedListener（）注册一个侦听器，以更改后退堆栈。
+有关这些方法和其他方法的更多信息，请参考[FragmentManager](https://developer.android.google.cn/reference/androidx/fragment/app/FragmentManager.html)文档。
+
+如上一节中所述，你还可以使用FragmentManager打开FragmentTransaction，这使你可以执行事务，例如添加和删除Fragment。
+#### Performing Fragment Transactions
+在activity中使用Fragment的一个重要功能是能够响应用户交互，添加，删除，替换和执行其他操作。 你提交给activity的每组更改都称为一个事务，你可以使用FragmentTransaction中的API进行一次更改。 你还可以将每个事务保存到activity管理的后台堆栈中，从而允许用户向后浏览Fragment更改（类似于向后浏览activity）。
+
+你可以像这样从FragmentManager获取FragmentTransaction的实例：
+```java
+FragmentManager fragmentManager = getSupportFragmentManager();
+FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+```
+每个事务都是你要同时执行的一组更改。 你可以使用诸如add（），remove（）和replace（）之类的方法设置要为给定事务执行的所有更改。 然后，要将事务应用于activity，必须调用commit（）。  
+但是，在调用commit（）之前，可能需要调用addToBackStack（），以便将事务添加到Fragment事务的后堆栈中。 此后back stack由activity管理，并允许用户通过按“后退”按钮返回到先前的Fragment状态。  
+例如，以下是将一个Fragment替换为另一个Fragment并在后堆栈中保留先前状态的方法：
+```java
+// Create new fragment and transaction
+Fragment newFragment = new ExampleFragment();
+FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack
+transaction.replace(R.id.fragment_container, newFragment);
+transaction.addToBackStack(null);
+
+// Commit the transaction
+transaction.commit();
+```
+在此示例中，newFragment替换R.id.fragment_container ID标识的布局容器中当前存在的任何Fragment（如果有）。 通过调用addToBackStack（），替换事务将保存到back stack中，因此用户可以撤消该事务并通过按“后退”按钮取回上一个Fragment。  
+然后，FragmentActivity通过onBackPressed（）从back stack自动检索Fragment。  
+如果你对事务添加了多个更改（例如另一个add（）或remove（））并调用addToBackStack（），则在调用commit（）之前应用的所有更改都将作为单个事务添加到back stack中。 返回按钮会把他们一起反转（pop 出来）。  
+向FragmentTransaction添加更改的顺序无关紧要，除了：
+
+- 你必须最后调用commit（）。
+- 如果要将多个Fragment添加到同一容器，则添加Fragment的顺序将决定它们在视图层次结构中的显示顺序。
+
+如果在执行删除Fragment的事务时未调用addToBackStack（），则在提交事务时该Fragment将被销毁，并且用户无法导航回该Fragment。 而如果你在删除Fragment时确实调用了addToBackStack（），则该Fragment将停止，并且如果用户向后导航，该Fragment将在以后恢复。
+- Tip:  
+对于每个Fragment事务，可以在提交之前调用setTransition（）来应用过渡动画。
+
+调用commit（）不会立即执行事务。 而是将其安排为在activity的UI线程（“主”线程）上排队执行。 但是，如有必要，你可以从UI线程调用executePendingTransactions（）以立即执行commit（）提交的事务。 除非事务是其他线程中作业的依赖项，否则通常无需这样做。
+
+- Caution：  
+你只能在activity保存其状态之前（当用户离开activity时）使用commit（）提交事务。 如果你在此之后尝试提交，则会引发异常。 这是因为如果需要恢复activity，则提交后的状态可能会丢失。 对于可以丢失提交的情况，请使用commitAllowingStateLoss（）。
+
+### Communicating with the Activity
+尽管Fragment是作为独立于FragmentActivity的对象实现的，并且可以在多个activity中使用，但是Fragment的给定实例直接与承载该Fragment的activity相关联。  
+具体来说，该Fragment可以使用getActivity（）访问FragmentActivity实例，并轻松执行诸如在活动布局中查找视图之类的任务：
+```java
+View listView = getActivity().findViewById(R.id.list);
+```
+同样，你的activity可以通过使用findFragmentById（）或findFragmentByTag（）从FragmentManager获取对Fragment的引用来调用Fragment中的方法。 例如：
+```java
+ExampleFragment fragment = (ExampleFragment) getSupportFragmentManager().findFragmentById(R.id.example_fragment);
+```
+#### Creating event callbacks to the activity
+在某些情况下，你可能需要一个Fragment来与activity和/或activity托管的其他Fragment共享事件或数据。 要共享数据，请创建一个共享的ViewModel，如[ViewModel Guide](https://developer.android.google.cn/topic/libraries/architecture/viewmodel.html)的“在Fragment之间共享数据”部分所述。 如果你需要传播ViewModel无法处理的事件，则可以在Fragment内部定义一个回调接口，并要求主机activity实现该接口。 当activity通过接口收到回调时，它可以根据需要与布局中的其他Fragment共享信息。  
+例如，如果新闻应用程序的activity中有两个Fragment-一个Fragment显示文章列表（FragmentA），另一个Fragment显示文章（FragmentB），则FragmentA必须告诉activity何时选择了列表项，因此 它可以告诉FragmentB显示文章。 在这种情况下，在FragmentA内声明了OnArticleSelectedListener接口：
+```java
+public static class FragmentA extends ListFragment {
+    ...
+    // Container Activity must implement this interface
+    public interface OnArticleSelectedListener {
+        public void onArticleSelected(Uri articleUri);
+    }
+    ...
+}
+```
+然后，承载该Fragment的activity将实现OnArticleSelectedListener接口，并重写onArticleSelected（）以将来自FragmentA的事件通知FragmentB。为确保宿主activity实现了此接口，请使用FragmentA的onAttach（）回调方法（系统在调用此方法时会调用该方法） 将Fragment添加到activity）通过强制传递传递给onAttach（）的Activity实例化OnArticleSelectedListener的实例：
+```java
+public static class FragmentA extends ListFragment {
+    OnArticleSelectedListener listener;
+    ...
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            listener = (OnArticleSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnArticleSelectedListener");
+        }
+    }
+    ...
+}
+```
+如果activity尚未实现该接口，则该Fragment将引发ClassCastException。 成功后，mListener成员将保留对activity的OnArticleSelectedListener实现的引用，以便FragmentA可以通过调用由OnArticleSelectedListener接口定义的方法与activity共享事件。 例如，如果FragmentA是ListFragment的扩展，则每次用户单击列表项时，系统都会调用Fragment中的onListItemClick（），然后调用onArticleSelected（）与activity共享事件：
+```java
+public static class FragmentA extends ListFragment {
+    OnArticleSelectedListener listener;
+    ...
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        // Append the clicked item's row ID with the content provider Uri
+        Uri noteUri = ContentUris.withAppendedId(ArticleColumns.CONTENT_URI, id);
+        // Send the event and Uri to the host activity
+        listener.onArticleSelected(noteUri);
+    }
+    ...
+}
+```
+传递给onListItemClick（）的id参数是被单击项的行ID，活动（或其他片段）使用该ID从应用程序的ContentProvider中获取文章。  
+想了解更多的关于content provider的使用，请参考[Content Provider](https://developer.android.google.cn/guide/topics/providers/content-providers.html)
+#### Adding items to the App Bar
+你的Fragment可以通过实现onCreateOptionsMenu（）将菜单项添加到activity的“选项菜单”（因此是 app bar）。 但是，为了使此方法能够接收调用，必须在onCreate（）期间调用setHasOptionsMenu（），以指示该Fragment想向“选项菜单”添加项目。 否则，该Fragment将不会收到对onCreateOptionsMenu（）的调用。  
+然后，你将从Fragment添加到“选项菜单”的所有项目都将附加到现有菜单项。 当选择菜单项时，该Fragment还会接收到onOptionsItemSelected（）的回调。
+- Note:  
+尽管你的Fragment会为其添加的每个菜单项接收一个在项目中选择的回调，但activity是在用户选择菜单项时首先接收相应的回调。 如果activity在项目上选定的回调的实现不处理选定的项目，则该事件将传递到Fragment的回调。 对于“选项菜单”和上下文菜单而言，这是正确的。
+
+如果要看更多的关于menu的信息，请参考 [Menus](https://developer.android.google.cn/guide/topics/ui/menus.html) 和 [App Bar](https://developer.android.google.cn/training/appbar/index.html)
+
+### Handling the Fragment Lifecycle
+管理Fragment的生命周期非常类似于管理活动的生命周期。 像活动一样，Fragment可以以三种状态存在：
+- Resumed  
+该Fragment在正在运行的activity中可见。
+- Paused  
+另一个activity位于前景中并具有焦点，但是此Fragment所在的activity仍然可见（前景activity部分透明或不覆盖整个屏幕）。
+- Stopped  
+该Fragment不可见。 宿主activity已停止，或者Fragment已从activity中删除但已添加到back stack中。 停止的Fragment仍然有效（系统保留了所有状态和成员信息）。 但是，它不再对用户可见，如果该activity被 kill，则将被kill。
+
+就像activity一样，你可以结合使用[onSaveInstanceState(Bundle)](https://developer.android.google.cn/reference/androidx/fragment/app/Fragment.html#onSaveInstanceState(android.os.Bundle))，ViewModel和持久本地存储的组合，在配置更改和过程终止之间保留Fragment的UI状态。 要了解有关保存UI状态的更多信息，请参阅[Saving UI States](https://developer.android.google.cn/topic/libraries/architecture/saving-states.html)。  
+activity和Fragment之间在生命周期上最显着的区别是，是存储在其各自的back stack中的方式。 默认情况下，将一个activity放入一个由系统管理的activity的back stack中（默认情况下，该activity由系统管理），以便用户可以使用“后退”按钮导航回该activity，如[Task and back stack](https://developer.android.google.cn/guide/components/tasks-and-back-stack.html)中所述。 但是，只有在删除Fragment的事务期间通过调用addToBackStack（）显式请求保存实例时，才会将Fragment放入由宿主activity管理的后台堆栈中。  
+否则，管理Fragment生命周期与管理activity生命周期非常相似。 相同的做法适用。 请参阅 [The Activity Lifecycle](https://developer.android.google.cn/guide/components/activities/activity-lifecycle.html)和[Handling Lifecycles with Lifecycle-Aware Components](https://developer.android.google.cn/topic/libraries/architecture/lifecycle.html)，以了解有关activity生命周期及其管理方法的更多信息。
+ - Caution  
+ 如果你在Fragment中需要一个Context对象，则可以调用getContext（）。 但是，只有在将片段附加到活动时，才应小心调用getContext（）。 如果片段尚未附加或在其生命周期结束时分离，则getContext（）返回null。
+
+ #### Coordiating with the activity lifecycle
+ Fragment所在的activity的生命周期直接影响Fragment的生命周期，因此activity的每个生命周期回调都会为每个Fragment产生相似的回调。 例如，当activity收到onPause（）时，activity中的每个Fragment都会收到onPause（）。  
+ Fragment具有一些额外的生命周期回调，但是，它们处理与activity的唯一交互，以执行诸如构建和销毁Fragment的UI之类的操作。 这些其他回调方法是：
+ - onAttach()  
+ 当Fragment与activity相关联时调用（activity在此处传递）。
+ - onCreateView()  
+ 调用以创建与Fragment关联的视图层次结构。
+ - onActivityCreated()  
+ 当activity的onCreate（）方法返回时调用。
+ - onDestroyView()  
+ 在删除与Fragment关联的视图层次结构时调用。
+ - onDetach()  
+ 当Fragment与activity分离时调用
+
+ 下图说明了Fragment的生命周期流程，该流程受其宿主activity影响。在该图中，你可以看到activity的每个连续状态如何确定Fragment可以接收的回调方法。 例如，当activity收到其onCreate（）回调时，该activity中的一个Fragment接收的内容不过是onActivityCreated（）回调。
+ ![avatar](./image/activity_fragment_lifecycle.png)  
+ activity达到Resumed状态后，即可自由添加和删除Fragment。 因此，只有在activity处于恢复状态时，Fragment的生命周期才能独立更改。  
+ 但是，当activity离开Resumed状态时，activity再次将Fragment推入其生命周期。
+
+ ### Example
+为了将本文档中讨论的所有内容整合在一起，下面是一个使用两个Fragment创建两窗格布局的activity示例。 下面的activity包括一个Fragment，该Fragment显示了莎士比亚戏剧的标题列表，而另一个则显示了从列表中选择的戏剧摘要。 它还演示了如何根据屏幕配置提供Fragment的不同配置。
+- Note:  
+示例应用程序中提供了此activity的完整源代码，其中显示了示例FragmentLayout类的用法。
+
+主要activity在onCreate（）期间以通常的方式应用布局：
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    setContentView(R.layout.fragment_layout);
+}
+```
+应用的布局为fragment_layout.xml：
+```java
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <fragment class="com.example.android.apis.app.FragmentLayout$TitlesFragment"
+            android:id="@+id/titles" android:layout_weight="1"
+            android:layout_width="0px" android:layout_height="match_parent" />
+
+    <FrameLayout android:id="@+id/details" android:layout_weight="1"
+            android:layout_width="0px" android:layout_height="match_parent"
+            android:background="?android:attr/detailsElementBackground" />
+
+</LinearLayout>
+```
+使用此布局，一旦activity加载布局，系统就会立即实例化TitlesFragment（列出播放标题），而FrameLayout（用于显示播放摘要的Fragment出现在其中）会占用屏幕右侧的空间，但是 首先保持为空。 正如你将在下面看到的，直到用户从列表中选择一个项目后，Fragment才被放入FrameLayout中。  
+但是，并非所有的屏幕配置都足够宽，无法同时显示播放列表和摘要。 因此，通过将其保存在res / layout-land / fragment_layout.xml中，上述布局仅用于横向屏幕配置。  
+因此，当屏幕为纵向时，系统将应用以下布局，该布局保存在res/layout/fragment_layout.xml中
+```xml
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <fragment class="com.example.android.apis.app.FragmentLayout$TitlesFragment"
+            android:id="@+id/titles"
+            android:layout_width="match_parent" android:layout_height="match_parent" />
+</FrameLayout>
+```
+此布局仅包含TitlesFragment。 这意味着，当设备为纵向时，仅播放标题列表可见。 因此，当用户单击此配置中的列表项时，应用程序将启动一个新activity以显示摘要，而不是加载第二个Fragment。  
+接下来，你可以在Fragment类中看到如何完成此操作。 首先是TitlesFragment，它显示了莎士比亚戏剧标题的列表。 该Fragment扩展了ListFragment并依靠它来处理大多数列表视图工作。  
+在检查此代码时，请注意，当用户单击列表项时，有两种可能的行为：根据这两个layout 哪个是active的，它可以创建并显示一个新的Fragment以显示同一activity中的详细信息（添加 Fragment添加到FrameLayout中），或启动一个新的activity（可以显示Fragment）。
+```java
+public static class TitlesFragment extends ListFragment {
+    boolean dualPane;
+    int curCheckPosition = 0;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Populate list with our static array of titles.
+        setListAdapter(new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_activated_1, Shakespeare.TITLES));
+
+        // Check to see if we have a frame in which to embed the details
+        // fragment directly in the containing UI.
+        View detailsFrame = getActivity().findViewById(R.id.details);
+        dualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
+
+        if (savedInstanceState != null) {
+            // Restore last state for checked position.
+            curCheckPosition = savedInstanceState.getInt("curChoice", 0);
+        }
+
+        if (dualPane) {
+            // In dual-pane mode, the list view highlights the selected item.
+            getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            // Make sure our UI is in the correct state.
+            showDetails(curCheckPosition);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("curChoice", curCheckPosition);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        showDetails(position);
+    }
+
+    /**
+     * Helper function to show the details of a selected item, either by
+     * displaying a fragment in-place in the current UI, or starting a
+     * whole new activity in which it is displayed.
+     */
+    void showDetails(int index) {
+        curCheckPosition = index;
+
+        if (dualPane) {
+            // We can display everything in-place with fragments, so update
+            // the list to highlight the selected item and show the data.
+            getListView().setItemChecked(index, true);
+
+            // Check what fragment is currently shown, replace if needed.
+            DetailsFragment details = (DetailsFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.details);
+            if (details == null || details.getShownIndex() != index) {
+                // Make new fragment to show this selection.
+                details = DetailsFragment.newInstance(index);
+
+                // Execute a transaction, replacing any existing fragment
+                // with this one inside the frame.
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                if (index == 0) {
+                    ft.replace(R.id.details, details);
+                } else {
+                    ft.replace(R.id.a_item, details);
+                }
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+            }
+
+        } else {
+            // Otherwise we need to launch a new activity to display
+            // the dialog fragment with selected text.
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), DetailsActivity.class);
+            intent.putExtra("index", index);
+            startActivity(intent);
+        }
+    }
+}
+```
+第二个片段DetailsDetails显示了从TitlesFragment列表中选择的项目的播放摘要：
+```java
+public static class DetailsFragment extends Fragment {
+    /**
+     * Create a new instance of DetailsFragment, initialized to
+     * show the text at 'index'.
+     */
+    public static DetailsFragment newInstance(int index) {
+        DetailsFragment f = new DetailsFragment();
+
+        // Supply index input as an argument.
+        Bundle args = new Bundle();
+        args.putInt("index", index);
+        f.setArguments(args);
+
+        return f;
+    }
+
+    public int getShownIndex() {
+        return getArguments().getInt("index", 0);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        if (container == null) {
+            // We have different layouts, and in one of them this
+            // fragment's containing frame doesn't exist. The fragment
+            // may still be created from its saved state, but there is
+            // no reason to try to create its view hierarchy because it
+            // isn't displayed. Note this isn't needed -- we could just
+            // run the code below, where we would create and return the
+            // view hierarchy; it would just never be used.
+            return null;
+        }
+
+        ScrollView scroller = new ScrollView(getActivity());
+        TextView text = new TextView(getActivity());
+        int padding = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                4, getActivity().getResources().getDisplayMetrics());
+        text.setPadding(padding, padding, padding, padding);
+        scroller.addView(text);
+        text.setText(Shakespeare.DIALOGUE[getShownIndex()]);
+        return scroller;
+    }
+}
+```
+
+回想一下TitlesFragment类，如果用户单击一个列表项并且当前布局不包括R.id.details视图（DetailsFragment所属的视图），则该应用程序将启动DetailsActivity活动以显示其中的内容。  
+这是DetailsActivity，它简单地嵌入DetailsFragment以在屏幕为纵向时显示所选的播放摘要：
+```java
+public static class DetailsActivity extends FragmentActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE) {
+            // If the screen is now in landscape mode, we can show the
+            // dialog in-line with the list so we don't need this activity.
+            finish();
+            return;
+        }
+
+        if (savedInstanceState == null) {
+            // During initial setup, plug in the details fragment.
+            DetailsFragment details = new DetailsFragment();
+            details.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, details).commit();
+        }
+    }
+}
+```
+请注意，如果配置为横向，则此activity将自行完成，以便主activity可以接管并在TitlesFragment旁边显示DetailsFragment。 如果用户以纵向方向启动DetailsActivity，但随后旋转为横向（重新启动当前activity），则会发生这种情况。
+### Additional resources
+Fragment 被用在了[Sunflower](https://github.com/googlesamples/android-sunflower) demo app 上面.
+## Create a fragment
+你可以将Fragment视为activity的模块化部分，该Fragment具有自己的生命周期，接收其自己的输入事件，并且可以在activity运行时对其进行添加或删除（类似于“子activity”，你可以 在不同的activity中重复使用）。 本课程说明如何使用支持库扩展Fragment类，以便你的应用程序与运行Android 1.6以下版本的设备保持兼容。
+
+与其在Fragment的生命周期方法中设置依赖组件，不如创建一个Lifecycle-aware component。 当你的Fragment在其生命周期中移动时，该组件可以处理所需的任何设置或拆除。 然后，可以在其他“片段和活动”中重用生命周期感知组件，以避免代码重复，并减少需要在Fragment/Activity本身中进行的设置量。 有关更多信息，请阅读 [Handling Lifecycles with Lifecycle-Aware Components](https://developer.android.google.cn/topic/libraries/architecture/lifecycle.html)  
+在开始本课程之前，你必须设置你的Android项目以使用支持库。 如果你以前没有使用过支持库，请按照支持库设置文档设置你的项目以使用v4库。 但是，你也可以通过使用v7 appcompat库将其包含在活动中，该库与Android 2.1（API级别7）兼容，并且还包含Fragment API。  
+有关实现片段的更多信息，请参见[Fragments](https://developer.android.google.cn/guide/components/fragments.html)。 你还可以通过[relevant sample app](http://developer.android.google.cn/shareables/training/FragmentBasics.zip)来了解更多信息。
+
+### Create a Fragment Class
+要创建Fragment，请扩展Fragment类，然后重写关键生命周期方法以插入你的应用程序逻辑，类似于使用Activity类的方法。  
+创建Fragment时的区别是必须使用onCreateView（）回调定义布局。 实际上，这是使Fragment运行所需的唯一回调。 例如，下面是一个简单的Fragment，它指定了自己的布局：
+```java
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
+public class ArticleFragment extends Fragment {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.article_view, container, false);
+    }
+}
+```
+就像activity一样，一个Fragment应该实现其他生命周期回调，使你可以在从activity中添加或删除activity以及activity在其生命周期状态之间转换时管理其状态。 例如，当调用activity的onPause（）方法时，activity中的任何Fragment也会收到对onPause（）的调用。  
+[Fragmens 开发指南](https://developer.android.google.cn/guide/components/fragments.html) 提供了有关Fragment生命周期和回调方法的更多信息。
+### Add a Fragment to an Activity using XML
+尽管Fragment是可重用的模块化UI组件，但Fragment类的每个实例都必须与父FragmentActivity关联。 你可以通过在activity布局XML文件中定义每个Fragment来实现这种关联。
+- Note:  
+FragmentActivity是支持库中提供的特殊activity，用于处理API等级11之前的系统版本上的片段。如果你支持的最低系统版本是API等级11或更高版本，则可以使用常规的Activity。
+
+这是一个示例布局文件，当设备屏幕被认为是“大”（由large 限定符指定）时，该示例将两个片段添加到活动中。
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <fragment android:name="com.example.android.fragments.HeadlinesFragment"
+              android:id="@+id/headlines_fragment"
+              android:layout_weight="1"
+              android:layout_width="0dp"
+              android:layout_height="match_parent" />
+
+    <fragment android:name="com.example.android.fragments.ArticleFragment"
+              android:id="@+id/article_fragment"
+              android:layout_weight="2"
+              android:layout_width="0dp"
+              android:layout_height="match_parent" />
+
+</LinearLayout>
+```
+- Tip:  
+有关为不同屏幕尺寸创建布局的更多信息，请阅读[Supporting Different Screen Sizes](https://developer.android.google.cn/training/multiscreen/screensizes.html)。  
+然后将布局应用于你的activity：
+```java
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+
+public class MainActivity extends FragmentActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.news_articles);
+    }
+}
+```
+如果你使用的是v7 appcompat库，则你的activity应改为扩展AppCompatActivity，它是FragmentActivity的子类。 有关更多信息，请阅读[Adding the App Bar](https://developer.android.google.cn/training/appbar/index.html)。
+
+- Note: 
+通过在布局XML文件中定义Fragment将Fragment添加到activity布局时，无法在运行时删除该Fragment。 如果你打算在用户交互过程中切入和切出Fragment，则必须在activity首次启动时将Fragment添加到activity中，如构建灵活的UI中所示。
+
+## Test your Fragments 
+ [Test your Fragments](https://developer.android.google.cn/training/basics/fragments/testing?hl=en)
+
+## Build a flexible UI
+在设计应用程序以支持各种屏幕尺寸时，可以在不同的布局配置中重复使用Fragment，以根据可用的屏幕空间来优化用户体验。  
+例如，在手持设备上，一次显示一个窗格的用户界面可能只适合显示一个Fragment。 相反，你可能希望在具有更大屏幕尺寸的平板电脑上并排设置Fragment，以向用户显示更多信息。  
+![avatar](./image/fragments-screen-mock.png)
+FragmentManager类提供的方法允许你在运行时向activity添加，删除和替换Fragment，以创建动态体验。  
+有关实现Fragment的更多信息，请参见以下资源:
+- [Fragments](https://developer.android.google.cn/guide/components/fragments.html)
+- [Supporting Tablets and Handsets](https://developer.android.google.cn/guide/practices/tablets-and-handsets.html)
+- [Sample App](http://developer.android.google.cn/shareables/training/FragmentBasics.zip)
+
+### Add a Fragment to an Activity at Runtime
+你可以在activity运行时期间向activity添加Fragment，而不是在布局文件中为activity定义Fragment（如上一课中的 &lt; fragment &gt; 元素所示）。 如果你计划在activity期间更改Fragment，则这是必要的。
+
+要执行事务，例如添加或删除Fragment，必须使用FragmentManager创建FragmentTransaction，该Fragment提供用于添加，删除，替换和执行其他Fragment事务的API。  
+如果你的activity允许删除和替换Fragment，则应在activity的onCreate（）方法期间将初始Fragment添加到activity中。  
+处理Fragment时（尤其是在运行时添加Fragment时）的一个重要规则是，你的activity布局必须包含一个容器View，你可以在其中插入Fragment。  
+以下布局是上一课中显示的布局的替代，该课程一次仅显示一个Fragment。 为了用一个Fragment替换另一个Fragment，活动的布局包括一个空的FrameLayout，用作Fragment容器。  
+请注意，文件名与上一课中的布局文件相同，但是布局目录没有大的限定符，因此，当设备屏幕小于大屏幕时，将使用此布局，因为屏幕无法同时容纳两个Fragment。   
+res/layout/news_articles.xml:
+```xml
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+```
+在你的activity中，使用支持库API调用getSupportFragmentManager（）以获取FragmentManager。 然后调用beginTransaction（）创建FragmentTransaction，然后调用add（）添加一个Fragment。  
+你可以使用相同的FragmentTransaction为活动执行多个Fragment事务。 准备好进行更改时，必须调用commit（）。 
+
+例如，以下是将Fragment添加到以前的布局的方法：
+```java
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+
+public class MainActivity extends FragmentActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState?) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.news_articles);
+
+        // Check that the activity is using the layout version with
+        // the fragment_container FrameLayout
+        if (findViewById(R.id.fragment_container) != null) {
+
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {
+                return;
+            }
+
+            // Create a new Fragment to be placed in the activity layout
+            HeadlinesFragment firstFragment = new HeadlinesFragment();
+
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, firstFragment).commit();
+        }
+    }
+}
+```
+
+因为Fragment是在运行时添加到FrameLayout容器中的，而不是使用 &lt;fragment&gt; 元素在activity的布局中定义Fragment，所以activity可以删除Fragment并将其替换为另一个Fragment。
+
+### Replace One Fragment with Another
+替换Fragment的过程类似于添加Fragment的过程，但是需要replace（）方法而不是add（）  
+请记住，执行Fragment事务（例如替换或删除事务）时，通常允许用户向后导航并“撤消”更改。 为了允许用户向后浏览Fragment事务，必须在提交FragmentTransaction之前调用addToBackStack（）。
+- Note:  
+当你删除或替换一个Fragment并将事务添加到后台堆栈时，被删除的Fragment将停止（不销毁）。 如果用户导航返回以还原该Fragment，它将重新启动。 如果不将事务添加到back stack，则在删除或替换该Fragment时会将其销毁。
+用一个Fragment替换另一个Fragment的示例：
+```java
+// Create fragment and give it an argument specifying the article it should show
+ArticleFragment newFragment = new ArticleFragment();
+Bundle args = new Bundle();
+args.putInt(ArticleFragment.ARG_POSITION, position);
+newFragment.setArguments(args);
+
+FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack so the user can navigate back
+transaction.replace(R.id.fragment_container, newFragment);
+transaction.addToBackStack(null);
+
+// Commit the transaction
+transaction.commit();
+```
+addToBackStack（）方法采用一个可选的字符串参数，该参数指定事务的唯一名称。 除非你计划使用FragmentManager.BackStackEntry API执行高级Fragment操作，否则不需要该名称。
+
+## Communicate with other fragments
+为了重用Fragment UI组件，你应该将每个组件构建为定义其自己的布局和行为的完全独立的模块化组件。 一旦定义了这些可重用的Fragment，就可以将它们与activity关联，并将它们与应用程序逻辑连接起来以实现整体的复合UI。  
+通常，你会希望一个Fragment与另一个Fragment进行通信，例如，根据用户事件更改内容。 所有Fragment到Fragment的通信都是通过共享的ViewModel或关联的Activity完成的。 两个Fragment永远不要直接通信。  
+
+建议在Fragment之间进行通信的方法是创建一个共享的ViewModel对象。 这两个Fragment都可以通过其包含的Activity访问ViewModel。 Fragment可以更新ViewModel中的数据，如果使用LiveData公开了数据，则只要从ViewModel观察LiveData，新状态就会被推送到另一个Fragment。 若要查看如何实现这种通信，请阅读[ViewModel Guide](https://developer.android.google.cn/topic/libraries/architecture/viewmodel.html)中的“在Fragment之间共享数据”部分。  
+如果你无法使用共享的ViewModel在Fragment之间进行通信，则可以使用接口手动实现通信流程。 但是，这最终需要更多的工作来实现，并且在其他Fragment中不容易重用。
+### Define an Interface
+为了允许一个Fragment与其Activity进行通信，你可以在Fragment类中定义一个接口，并在Activity中实现它。 Fragment在其onAttach（）生命周期方法中捕获接口实现，然后可以调用Interface方法以与Activity进行通信。 
+这是Fragment到activity通信的示例：
+HeadlinesFragment
+```java
+public class HeadlinesFragment extends ListFragment {
+    OnHeadlineSelectedListener callback;
+
+    public void setOnHeadlineSelectedListener(OnHeadlineSelectedListener callback) {
+        this.callback = callback;
+    }
+
+    // This interface can be implemented by the Activity, parent Fragment,
+    // or a separate test implementation.
+    public interface OnHeadlineSelectedListener {
+        public void onArticleSelected(int position);
+    }
+
+    // ...
+}
+```
+MainActivity
+```java
+public static class MainActivity extends Activity
+        implements HeadlinesFragment.OnHeadlineSelectedListener{
+    // ...
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        if (fragment instanceof HeadlinesFragment) {
+            HeadlinesFragment headlinesFragment = (HeadlinesFragment) fragment;
+            headlinesFragment.setOnHeadlineSelectedListener(this);
+        }
+    }
+}
+```
+
+现在，该Fragment可以通过使用OnHeadlineSelectedListener接口的mCallback实例调用onArticleSelected（）方法（或接口中的其他方法）将消息传递给activity。  
+例如，当用户单击列表项时，将调用Fragment中的以下方法。 该Fragment使用回调接口将事件传递给父activity。
+```java
+@Override
+public void onListItemClick(ListView l, View v, int position, long id) {
+    // Send the event to the host activity
+    callback.onArticleSelected(position);
+}
+```
+
+### Implement the Interface
+为了从Fragment接收事件回调，承载它的activity必须实现Fragment类中定义的接口。  
+例如，以下activity实现了以上示例中的接口。
+```java
+public static class MainActivity extends Activity
+        implements HeadlinesFragment.OnHeadlineSelectedListener{
+    ...
+
+    public void onArticleSelected(int position) {
+        // The user selected the headline of an article from the HeadlinesFragment
+        // Do something here to display that article
+    }
+}
+```
+### Deliver a Message to a Fragment
+宿主activity可以通过使用findFragmentById（）捕获Fragment实例将消息传递到Fragment，然后直接调用该Fragment的公共方法。  
+例如，假设上面显示的activity可能包含另一个Fragment，该Fragment用于显示由上述回调方法返回的数据指定的项目。 在这种情况下，activity可以将在回调方法中收到的信息传递给另一个将显示该项目的Fragment：
+```java
+public static class MainActivity extends Activity
+        implements HeadlinesFragment.OnHeadlineSelectedListener{
+    ...
+
+    public void onArticleSelected(int position) {
+        // The user selected the headline of an article from the HeadlinesFragment
+        // Do something here to display that article
+
+        ArticleFragment articleFrag = (ArticleFragment)
+                getSupportFragmentManager().findFragmentById(R.id.article_fragment);
+
+        if (articleFrag != null) {
+            // If article frag is available, we're in two-pane layout...
+
+            // Call a method in the ArticleFragment to update its content
+            articleFrag.updateArticleView(position);
+        } else {
+            // Otherwise, we're in the one-pane layout and must swap frags...
+
+            // Create fragment and give it an argument for the selected article
+            ArticleFragment newFragment = new ArticleFragment();
+            Bundle args = new Bundle();
+            args.putInt(ArticleFragment.ARG_POSITION, position);
+            newFragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.fragment_container, newFragment);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
+        }
+    }
+}
+```
+要了解有关实现Fragment的更多信息，请参见 [Fragment](https://developer.android.google.cn/guide/components/fragments.html) 。 你还可以通过[relevant sample app](http://developer.android.google.cn/shareables/training/FragmentBasics.zip)来了解更多信息。
