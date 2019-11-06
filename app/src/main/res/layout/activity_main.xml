@@ -17,15 +17,20 @@
         android:text="Activity" />
 
     <Button
-        android:id="@+id/goToserviceBtn"
+        android:id="@+id/goToServiceBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Service" />
-
-    <FrameLayout
-        android:id="@+id/container"
+    <Button
+        android:id="@+id/goToBroadcastBtn"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="wrap_content"
+        android:text="Broadcast" />
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        />-->
 
 </LinearLayout>

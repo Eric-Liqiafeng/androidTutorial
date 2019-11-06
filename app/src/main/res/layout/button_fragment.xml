@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/button"
@@ -24,13 +25,13 @@
             android:id="@+id/chip3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="abc"/>
+            android:text="abc" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="edf"/>
+            android:text="edf" />
 
     </com.google.android.material.chip.ChipGroup>
 
@@ -42,7 +43,7 @@
 
     <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="120dp" >
+        android:layout_height="120dp">
 
         <RadioButton
             android:id="@+id/radioButton2"
