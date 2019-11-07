@@ -2410,3 +2410,125 @@ public static class MainActivity extends Activity
 }
 ```
 要了解有关实现Fragment的更多信息，请参见 [Fragment](https://developer.android.google.cn/guide/components/fragments.html) 。 你还可以通过[relevant sample app](http://developer.android.google.cn/shareables/training/FragmentBasics.zip)来了解更多信息。
+
+# Layout
+Layout 这部分不是官网翻译过来的
+## LinearLayout 
+这是一种在单列水平排列或者垂直排列的视图。
+以下代码段显示了如何在布局XML文件中包括线性布局：
+``` xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:paddingLeft="16dp"
+   android:paddingRight="16dp"
+   android:orientation="horizontal"
+   android:gravity="center">
+
+   <!-- Include other widget or layout tags here. These are considered
+           "child views" or "children" of the linear layout -->
+
+ </LinearLayout>
+```
+### 常用属性：
+- id  
+组件的资源id，在java文件中可以通过findViewById(int) 来找到该组件
+- layout_width  
+布局宽度，通常不直接写数字，用wrap_content(组件实际大小)，fill_parent或者match_parent填满父容器
+- layout_height  
+布局的宽度，参数同上
+- layout_gravity  
+控制该组件在父容器的对齐方式
+- gravity  
+控制组件所包含的子元素的对齐方式，可多个组合，比图(left|bottom)
+- orientation  
+布局中组件的排列方式，有horizontal(水平)，vertical(竖直，默认)，两种方式。
+- background 为该组件设置一个背景图片，或者直接用颜色覆盖
+### Weight（权重）
+该属性是用等比例划分区域
+- 最简单的用法，将width 设置为 0dp，然后组件会按照比例划分。
+- width不为0dp，则要通过计算
+
+### divider 分割线
+该属性用于为LinearLayout设置分割线图片，通过showDividers来设置分割线的所在位置，有四个可选值 none, middle, beginning, end;
+- divider  
+可绘制用作按钮之间的垂直分割线
+- showDividers  
+设置分割线所在的位置，有四个可选值： none,middle,beginning, end;
+- dividerPadding  
+设置分割线的padding
+
+weight 的简单用法
+```java
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:background="#ADFF2F" />
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="2"
+        android:background="#DA70D6" />
+
+</LinearLayout>
+```
+效果如下：
+![avatar](./image/linear_layout_sample_weight.png)
+如果不适用上述的那种设置为0dp,直接用wrap_content 和match_parent的话，则分为两种情况：  
+- wrap_content  
+直接按比例划分。
+- match_parent(fill_parent)  
+这个需要重新计算了，如下所示：
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="one"
+        android:background="#98FB98"
+        />
+    <TextView
+        android:layout_weight="2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="two"
+        android:background="#FFFF00"
+        />
+    <TextView
+        android:layout_weight="3"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="three"
+        android:background="#FF00FF"
+        />
+
+</LinearLayout>
+```
+效果如下： 
+![avatar](./image/linear_layout_match_parent_weight.png)
+这里我们的代码里面有三块区域，比例是1：2：3，但是实际上显示的只有两块区域，比例为2：1，这里实际显示是需要计算的：
+step1: 个个都是fill_parent,但是屏幕只有一个，所以剩余区域为 1-3 = -2fill_parent。  
+step2: 比例是1：2：3，则各占 1/6，2/6，3/6.  
+step3: 先到先得，先分给第一个区域，
+- 计算第一块区域 1+(-2*(1/6)) = 2/3 fill_parent,- 第二块区域，计算 1+(-2*(2/6))=1/3fill_parent,
+- 第三块区域： 1+(-2*(3/6))=0fill_parent.
+所以结果是第一块区域占用了两部分，第二块区域占用了一份，所以第三块区域不显示
+## RelativeLayout
+RelativeLayout是一种可以相对于彼此或相对于父项描述子项位置的布局。
+## FrameLayout
+## ConstraintLayout

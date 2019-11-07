@@ -27,6 +27,12 @@
         android:layout_height="wrap_content"
         android:text="Broadcast" />
 
+    <Button
+        android:id="@+id/goToLayoutBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Layout" />
+
 <!--    <FrameLayout-->
 <!--        android:id="@+id/container"-->
 <!--        android:layout_width="match_parent"-->

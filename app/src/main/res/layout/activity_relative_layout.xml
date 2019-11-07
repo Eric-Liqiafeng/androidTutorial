@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/relativeCenterBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="center"/>
+
+    <!-- 在中间图片的左边 -->
+    <Button
+        android:id="@+id/relativeLeftBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_toLeftOf="@id/relativeCenterBtn"
+        android:layout_centerVertical="true"
+        android:text="left"/>
+
+    <!-- 在中间图片的右边 -->
+    <Button
+        android:id="@+id/relativeRightBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_toRightOf="@id/relativeCenterBtn"
+        android:layout_centerVertical="true"
+        android:text="right"/>
+
+    <!-- 在中间图片的上面-->
+    <Button
+        android:id="@+id/relativeAboveBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_above="@id/relativeCenterBtn"
+        android:layout_centerHorizontal="true"
+        android:text="above"/>
+
+    <!-- 在中间图片的下面 -->
+    <Button
+        android:id="@+id/relativeBottomBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/relativeCenterBtn"
+        android:layout_centerHorizontal="true"
+        android:text="below"/>
+
+</RelativeLayout>

@@ -1,7 +1,6 @@
 package com.allen.learn.android.tutorial;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.content.Intent;
@@ -13,7 +12,7 @@ import com.allen.learn.android.tutorial.Intent.IntentMainActivity;
 import com.allen.learn.android.tutorial.activity.ActivityMainActivity;
 import com.allen.learn.android.tutorial.broadcast.MyLocalBroadcastReceiver;
 import com.allen.learn.android.tutorial.broadcast.SendLocalBroadcastActivity;
-import com.allen.learn.android.tutorial.fragment.MainFragment;
+import com.allen.learn.android.tutorial.layout.MainLayoutActivity;
 import com.allen.learn.android.tutorial.service.ServiceMainActivity;
 import com.allen.learn.android.tutorial.util.Constant;
 
@@ -25,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button gotToServiceBtn;
     private Button gotToBroadcastBtn;
+    private Button goToLayoutBtn;
 
     private MyLocalBroadcastReceiver myLocalBroadcastReceiver;
 
@@ -61,6 +61,13 @@ public class MainActivity extends AppCompatActivity {
 //        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //        fragmentTransaction.add(R.id.container,mainFragment);
 //        fragmentTransaction.commit();
+
+        goToLayoutBtn = findViewById(R.id.goToLayoutBtn);
+        goToLayoutBtn.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, MainLayoutActivity.class);
+            startActivity(intent);
+        });
+
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constant.LOCAL_BROADCASE_TEST);
