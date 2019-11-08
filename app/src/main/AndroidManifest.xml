@@ -45,9 +45,11 @@
         <activity android:name=".service.MusicWithStartedAndBoundServiceActivity"></activity>
 
         <activity android:name=".broadcast.SendLocalBroadcastActivity"></activity>
+
         <activity android:name=".layout.MainLayoutActivity"></activity>
         <activity android:name=".layout.LinearLayoutActivity"></activity>
         <activity android:name=".layout.RelativeLayoutActivity"></activity>
+        <activity android:name=".layout.FrameLayoutActivity"></activity>
 
         <service android:name=".service.MyForegroundMusicService"
             android:enabled="true" android:exported="true"/>

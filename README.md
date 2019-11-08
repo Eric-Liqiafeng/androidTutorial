@@ -2530,5 +2530,702 @@ step3: 先到先得，先分给第一个区域，
 所以结果是第一块区域占用了两部分，第二块区域占用了一份，所以第三块区域不显示
 ## RelativeLayout
 RelativeLayout是一种可以相对于彼此或相对于父项描述子项位置的布局。
+请注意，RelativeLayout的大小与其子位置之间不能具有循环依赖关系。 例如，你不能将RelativeLayout的高度设置为WRAP_CONTENT，将其子级设置为ALIGN_PARENT_BOTTOM。
+基本属性： 
+- gravity  
+设置容器内组件的对齐方式
+- ignoreGravity  
+设置了该属性为true的属性的组件将不受gravity属性的影响
+
+根据父容器定位：
+- layout_alignParentLeft 左对齐
+- layout_alignParentRight 右对齐
+- layout_alignParentTop 顶部对齐
+- layout_alignParentBottom 底部对齐
+- android:layout_centerHorizontal 水平居中
+- android:layout_centerVertical 垂直居中
+- android:layout_centerInParent 中间位置
+根据兄弟组件定位： 
+- layout_toLeftOf 参照组件的左边
+- layout_toRightOf 参考组件的右边
+- layout_above 参考组件的上方
+- layout_below 参考组件
+- layout_alignTop 对齐参考组件的上边界
+- layout_alignBottom 对齐参考组件的下边界
+- layout_alignLeft 对齐参考组件的左边界
+- layout_alignRight 对齐参考组件的右边界
+
+经典梅花布局如下：
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/relativeCenterBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="center" />
+
+    <!-- 在中间图片的左边 -->
+    <Button
+        android:id="@+id/relativeLeftBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/relativeCenterBtn"
+        android:text="left" />
+
+    <!-- 在中间图片的右边 -->
+    <Button
+        android:id="@+id/relativeRightBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/relativeCenterBtn"
+        android:text="right" />
+
+    <!-- 在中间图片的上面-->
+    <Button
+        android:id="@+id/relativeAboveBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_above="@id/relativeCenterBtn"
+        android:layout_centerHorizontal="true"
+        android:text="above" />
+
+    <!-- 在中间图片的下面 -->
+    <Button
+        android:id="@+id/relativeBottomBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/relativeCenterBtn"
+        android:layout_centerHorizontal="true"
+        android:text="below" />
+
+</RelativeLayout>
+```
+效果如下： 
+![avatar](./image/relative_layout_sample.png)
 ## FrameLayout
-## ConstraintLayout
+FrameLayout旨在遮挡屏幕上的某个区域以显示单个项目。 通常，应使用FrameLayout来保存单个子视图，因为在子视图彼此不重叠的情况下，难以以可扩展到不同屏幕尺寸的方式组织子视图。 不过，你可以使用android：layout_gravity属性将多个子项添加到FrameLayout并通过将gravity分配给每个子项来控制它们在FrameLayout中的位置。
+这个布局比较简单，例子如下:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:background="#FF6143" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:background="#7BFE00" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="#FFFF00" />
+
+</FrameLayout>
+```
+![avatar](./image/frame_layout_sample.png)
+
+## ConstraintLayout(官方文档 2019/11/7)
+ConstraintLayout是android.view.ViewGroup，它允许你灵活地定位和调整窗口小部件的大小。
+
+注意：ConstraintLayout是作为支持库提供的，你可以在从API级别9（Gingerbread）开始的Android系统上使用。 因此，我们计划随着时间的推移丰富其API和功能。 本文档将反映这些更改。
+下面是当前的constraints 可以使用的变量： 
+- Relative positioning (相对定位)
+- Margins (边距)
+- Centering positioning (居中定位)
+- Circular positioning (圆形定位)
+- Visibility behavior (可见性行为)
+- Dimension constraints (尺寸限制)
+- Chains (链条)
+- Virtual Helpers objects (虚拟助手对象)
+- Optimizer (优化器)
+### Developer Guide
+#### Relative positioning
+相对定位是在ConstraintLayout中创建布局的基本构件之一。 这些约束允许你将给定的小部件相对于另一个小部件定位。 你可以在水平和垂直轴上约束小部件：
+
+Horizontal Axis(水平轴)：left, right, start and end sides  
+Vertical Axis(垂直轴)：top, bottom sides and text baseline  
+
+一般概念是将窗口小部件的给定一侧限制为任何其他窗口小部件的另一侧。  
+例如，为了将按钮B定位在按钮A的右侧： 
+![avatar](./image/relative-positioning.png)
+你需要:
+```xml
+<Button android:id="@+id/buttonA" ... />
+         <Button android:id="@+id/buttonB" ...
+                 app:layout_constraintLeft_toRightOf="@+id/buttonA" />
+```
+这告诉系统我们希望将按钮B的左侧限制在按钮A的右侧。这种位置限制意味着系统将尝试使两侧共享相同的位置。
+![avatar](./image/relative-positioning-constraints.png)
+
+下面是可用的约束：
+- layout_constraintLeft_toLeftOf
+- layout_constraintLeft_toRightOf
+- layout_constraintRight_toLeftOf
+- layout_constraintRight_toRightOf
+- layout_constraintTop_toTopOf
+- layout_constraintTop_toBottomOf
+- layout_constraintBottom_toTopOf
+- layout_constraintBottom_toBottomOf
+- layout_constraintBaseline_toBaselineOf
+- layout_constraintStart_toEndOf
+- layout_constraintStart_toStartOf
+- layout_constraintEnd_toStartOf
+- layout_constraintEnd_toEndOf
+
+它们都为另一个小部件或父部件（将引用父容器，即ConstraintLayout）添加参考ID：
+```xml
+<Button android:id="@+id/buttonB" ...
+                 app:layout_constraintLeft_toLeftOf="parent" />
+         
+```
+#### Margins
+![avatar](./image/relative-positioning-margin.png)
+如果设置了边距，则会将它们应用于相应的约束（如果存在）（上图），从而将边距强制为目标端与源端之间的空间。 可以使用通常的布局边距属性来达到此效果：
+- android:layout_marginStart
+- android:layout_marginEnd
+- android:layout_marginLeft
+- android:layout_marginTop
+- android:layout_marginRight
+- android:layout_marginBottom 
+
+请注意，边距只能为正数或等于零，并采用Dimension。  
+#### Margins when connected to a GONE widget
+当位置限制目标的可见性为View.GONE时，你还可以使用以下属性指示要使用的其他边距值：
+- layout_goneMarginStart
+- layout_goneMarginEnd
+- layout_goneMarginLeft
+- layout_goneMarginTop
+- layout_goneMarginRight
+- layout_goneMarginBottom
+#### Centering positioning and bias
+ConstraintLayout的一个有用方面是如何处理“不可能的”约束。 例如，如果我们有以下内容：
+```xml
+<android.support.constraint.ConstraintLayout ...>
+             <Button android:id="@+id/button" ...
+                 app:layout_constraintLeft_toLeftOf="parent"
+                 app:layout_constraintRight_toRightOf="parent/>
+         </>
+```
+除非ConstraintLayout恰好具有与Button完全相同的大小，否则无法同时满足两个约束（双方都不能位于我们希望它们位于的位置）。
+![avatar](./image/centering-positioning.png)
+在这种情况下，约束的作用就像反向作用力一样，将小部件平均拉开(上图)。 这样小部件将最终位于父容器的中心。 这将类似地应用于垂直约束。
+#### Bias
+遇到这样相反的约束时，默认值是使小部件居中； 但是你可以使用bias属性调整位置，使一侧偏向另一侧：
+- layout_constraintHorizontal_bias
+- layout_constraintVertical_bias
+![avatar](./image/centering-positioning-bias.png)
+例如，以下内容将使左侧具有30％的偏差，而不是默认值50％，这样左侧将更短，而小部件则更偏向左侧(上图)：
+```xml
+<android.support.constraint.ConstraintLayout ...>
+             <Button android:id="@+id/button" ...
+                 app:layout_constraintHorizontal_bias="0.3"
+                 app:layout_constraintLeft_toLeftOf="parent"
+                 app:layout_constraintRight_toRightOf="parent/>
+         </>
+```
+
+使用bias，你可以设计出更好地适应屏幕尺寸变化的用户界面。
+
+#### Circular positioning (Added in 1.1)
+你可以相对于另一个窗口小部件中心以一定角度和距离约束一个窗口小部件中心。 这使你可以将小部件放置在圆上（参见下图）。 
+![avatar](./image/circle1.png)
+可以使用以下属性
+- layout_constraintCircle : 引用一个小部件ID
+- layout_constraintCircleRadius : 到另一个小部件中心的距离
+- layout_constraintCircleAngle : 小部件应该处于哪个角度（以度为单位，从0到360）
+```xml
+<Button android:id="@+id/buttonA" ... />
+  <Button android:id="@+id/buttonB" ...
+      app:layout_constraintCircle="@+id/buttonA"
+      app:layout_constraintCircleRadius="100dp"
+      app:layout_constraintCircleAngle="45" />
+```
+#### Visibility behavior
+ConstraintLayout对标记visible为View.GONE的小部件的有特定处理。  
+通常，GONE小部件将不会显示，也不是布局本身的一部分（即，如果标记为GONE，它们的实际尺寸将不会更改）。  
+但是就布局计算而言，GONE小部件仍然是其中的一部分，但有一个重要的区别：
+ - 对于布局过程，其尺寸将被视为零（基本上，它们将解析为一个点）
+ - 如果它们对其他小部件有约束，则仍然会遵守它们，但是任何边距都将等于零
+ ![avatar](./image/visibility-behavior.png)  
+ 这种特定的行为允许构建布局，你可以在其中临时将小部件标记为GONE，而不会破坏布局（上图），这在执行简单的布局动画时特别有用。
+ - Note:  
+ 使用的边距将是B连接到A时定义的边距（示例请参见图7）。 在某些情况下，这可能不是你想要的边距（例如，A的容器侧面有100dp的边距，B到A的边距只有16dp，标记A消失了，B的容器边距为16dp）。 因此，你可以指定在连接到标记为已消失的窗口小部件时要使用的备用边距值（请参见上面有关 Margins when connected to a GONE widget 部分）。
+ #### Dimensions constraints 
+ ##### Minimum dimensions on ConstraintLayout
+你可以为ConstraintLayout本身定义最小和最大 size：
+- android:minWidth 为layout 设置最小宽度
+- android:minHeight 为layout 设置最小高度
+- android:maxWidth 为layout 设置最大宽度
+- android:maxHeight 为layout设置最大高度  
+
+这些最小和最大尺寸将在ConstraintLayout的尺寸设置为WRAP_CONTENT时使用。
+##### Widgets dimension constraints
+可以通过3种不同的方式设置android：layout_width和android：layout_height属性来指定小部件的尺寸：
+- 使用特定尺寸（文字值（例如123dp或尺寸参考）
+- 使用WRAP_CONTENT，这将要求小部件计算自己的大小
+- 使用0dp，相当于“ MATCH_CONSTRAINT”
+![avatar](./image/dimension-match-constraints.png)
+前两个以与其他布局相似的方式工作。 最后一个将按照与设置的约束匹配的方式调整小部件的大小（请参见上图，（a）是wrap_content，（b）是0dp）。 如果设置了边距，则将在计算中予以考虑（上图，（c）的值为0dp）。
+重要提示：不建议对ConstraintLayout中包含的窗口小部件使用MATCH_PARENT。 可以通过使用MATCH_CONSTRAINT来定义类似的行为，并将相应的左/右或上/下约束设置为"parent"。
+##### WRAP_CONTENT : enforcing constraints (Added in 1.1) 
+如果将尺寸设置为WRAP_CONTENT，则在1.1之前的版本中，它们将被视为文字尺寸，这意味着约束不会限制生成的尺寸。 通常，这足够了（并且更快），但在某些情况下，你可能想使用WRAP_CONTENT，但仍要强制执行约束以限制结果尺寸。 在这种情况下，你可以添加相应的属性之一：
+- app:layout_constrainedWidth=”true|false”
+- app:layout_constrainedHeight=”true|false”
+##### MATCH_CONSTRAINT dimensions (Added in 1.1)  
+当尺寸设置为MATCH_CONSTRAINT时，默认行为是使结果尺寸占用所有可用空间。 可以使用其他几个修饰符：
+- layout_constraintWidth_min and layout_constraintHeight_min 设置最小尺寸
+- layout_constraintWidth_max and layout_constraintHeight_max  设置最大尺寸
+- layout_constraintWidth_percent and layout_constraintHeight_percent 将此尺寸设置为父尺寸的百分比
+###### Min and Max
+为min和max指示的值可以是dp中的尺寸，也可以是wrap，这将使用与WRAP_CONTENT相同的值。
+百分比大小：  
+要使用百分比，你需要设置以下内容：
+- 尺寸应设置为MATCH_CONSTRAINT（0dp）
+- 默认值应设置为app：layout_constraintWidth_default ="percent"或app：layout_constraintHeight_default ="percent"
+- 然后将layout_constraintWidth_percent或layout_constraintHeight_percent属性设置为0到1之间的值
+###### Ratio
+你还可以将小部件的一个尺寸定义为另一尺寸的比例。 为此，你需要至少将一个约束尺寸设置为0dp（即MATCH_CONSTRAINT），然后将layout_constraintDimensionRatio属性设置为给定的比例。 例如：
+```xml
+         <Button android:layout_width="wrap_content"
+                   android:layout_height="0dp"
+                   app:layout_constraintDimensionRatio="1:1" />
+```
+将按钮的高度设置为与按钮的宽度相同。  
+该比率可以表示为：
+- float value，表示宽度和高度之间的比率
+- 形式为"宽度：高度"的比率
+如果两个尺寸都设置为MATCH_CONSTRAINT（0dp），则也可以使用比率。 在这种情况下，系统将设置满足所有约束并维持指定长宽比的最大尺寸。 要基于另一侧的尺寸来约束一个特定的侧面，你可以预先附加W，或H来分别约束其宽度或高度。例如，如果一个尺寸受两个目标约束（例如，宽度为0dp且以父对象为中心） ），你可以通过在比率的前面加上字母W（用于约束宽度）或H（用于约束高度）来表示应该约束哪一侧，并用逗号分隔：
+```xml
+         <Button android:layout_width="0dp"
+                   android:layout_height="0dp"
+                   app:layout_constraintDimensionRatio="H,16:9"
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   app:layout_constraintTop_toTopOf="parent"/>
+```
+将按照16：9的比例设置按钮的高度，而按钮的宽度将使约束与父项匹配。
+#### Chains
+链在单个轴上（水平或垂直）提供类似组的行为。 另一个轴可以独立约束。
+##### Creating a chain
+如果一组小部件通过双向连接链接在一起，则它们被视为一条链（请参见下图，该图显示了带有两个小部件的最小链）。
+![avatar](./image/chains.png)
+##### Chain heads
+链由在链的第一个元素（链的“头”）上设置的属性控制：
+![avatar](./image/chains-head.png)
+头部是水平链的最左侧小部件，垂直链的最顶部小部件。
+##### Margins in chains
+如果在连接上指定了边距，则将考虑在内。 对于散布链，将从分配的空间中扣除边距。
+##### Chain Style
+在链的第一个元素上设置属性layout_constraintHorizontal_chainStyle或layout_constraintVertical_chainStyle时，链的行为将根据指定的样式而改变（默认为CHAIN_SPREAD）。
+- CHAIN_SPREAD-元素将散布（默认样式）
+- 加权链-在CHAIN_SPREAD模式下，如果将某些小部件设置为MATCH_CONSTRAINT，它们将分割可用空间
+- CHAIN_SPREAD_INSIDE-类似，但是链的端点不会散开
+- CHAIN_PACKED-链中的元素将打包在一起。 子项的水平或垂直偏差属性将影响打包元素的位置
+![avatar](./image/chains-styles.png)
+##### Weighted chains
+链的默认行为是将元素平均分布在可用空间中。 如果一个或多个元素正在使用MATCH_CONSTRAINT，则它们将使用可用的空白空间（在它们之间平均分配）。 属性layout_constraintHorizontal_weight和layout_constraintVertical_weight将控制如何使用MATCH_CONSTRAINT在元素之间分配空间。 例如，在包含两个使用MATCH_CONSTRAINT的元素的链上，第一个元素的权重为2，第二个元素的权重为1，第一个元素所占的空间将是第二个元素的两倍。
+##### Margins and chains (in 1.1)
+在链中的元素上使用边距时，这些边距是可加的。
+
+例如，在水平链上，如果一个元素定义的右边距为10dp，下一个元素定义的左边距为5dp，则这两个元素之间的结果边距为15dp。
+
+计算链用于定位项目的剩余空间时，将项目及其边距一起考虑。 剩余空间不包含边距。
+#### Virtual Helper objects 
+除了前面详细介绍的内在功能之外，你还可以在ConstraintLayout中使用特殊的帮助器对象来帮助你进行布局。 当前，Guideline对象允许你创建相对于ConstraintLayout容器放置的水平和垂直参考线。 然后，可以通过将小部件约束到此类准则来对其进行定位。 在1.1中，你。
+#### Optimizer (in 1.1)
+在1.1中，我们公开了约束优化器。 你可以通过将标签app：layout_optimizationLevel添加到ConstraintLayout元素来确定要应用的优化。
+- none: 不应用优化
+- standard： 默认。仅优化直接约束和障碍约束
+- direct： 优化直接约束
+- barrier： 优化障碍约束
+- chain： 优化链约束（实验性的？ experimental）
+- dimensions: 优化尺寸度量（实验性的？experimental），减少匹配约束元素的度量数量
+
+此属性是一个掩码，因此你可以通过列出所需的优化来决定打开或关闭特定的优化。 例如：app：layout_optimizationLevel =“ direct | barrier | chain”
+# Notifications
+## Overview
+Notifications是指Android显示在应用程序UI外部的消息，旨在向用户提供提醒，其他人的交流或应用程序中的其他及时信息。 用户可以点击Notifications以打开你的应用或直接从Notifications中执行操作。
+此页面概述了Notifications的显示位置和可用功能。 如果要开始构建Notifications，请阅读 [create Notifications](https://developer.android.google.cn/training/notify-user/build-notification.html)。  
+
+有关设计和交互模式的更多信息，请参见 [Notifications design guide.](https://material.io/design/platform-guidance/android-notifications.html#usage)。 此外，请参阅[Android Notifications Sample](https://github.com/googlesamples/android-Notifications)，以获取有关在移动应用和可穿戴式应用中使用[Notification.Style](https://developer.android.google.cn/reference/androidx/core/app/NotificationCompat.Style) API的最佳做法的演示。
+
+### Appearances on a device
+Notifications会以不同的位置和格式显示给用户，例如状态栏中的图标，Notifications drawer中的更详细的条目，应用程序图标上的 badge 以及自动配对的可穿戴设备。
+#### Status bar and notification drawer
+#### Heads-up notification
+#### Lock Screen
+#### App icon badge
+#### Wear OS devices
+### Notification anatomy
+Notifications的设计由系统模板决定-你的应用只需定义模板各部分的内容。 Notifications的某些详细信息仅在展开的视图中显示。
+![avatar](./image/notification-callouts_2x.png)
+通知中最常见的部分如上图所示：  
+1. Small icon: 需要调用setSmallIcon() 设置.  
+2. App name: 这个是由系统提供的  
+3. time stamp： 这个是由系统提供，不过你可以通过setWhen()重写，或者通过setShowWhen(false)隐藏。  
+4. Large icon: 这个是个optional的设置(通常只会在显示联系人照片的时候使用，不要用来展示你的app icon)， 通过setLargeIcon() 设置。  
+5. Title: 这个也是optional的设置，通过setContentTitle()设置。  
+6. Text： 这个也是optional的设置，通过setContentText()  
+
+要看更多的关于创建notification方面的知识，请参考[Create a Notification](https://developer.android.google.cn/training/notify-user/build-notification.html)
+
+#### Notification actions
+#### Expandable notification
+### Notification updates and groups
+### Notification channels
+### Notification importance
+### Do Not Disturb mode
+### Notification for foreground services
+### Posting limits
+### Notification compatibility
+
+## Create a Notifiaction
+Notifications会在不使用应用程序时提供有关事件的简短及时信息。 本页教你如何为Android 4.0（API级别14）及更高版本创建具有各种功能的Notifications。 有关Notifications在Android上的显示方式的介绍，请参阅[Notifications Overview](https://developer.android.google.cn/guide/topics/ui/notifiers/notifications.html)。 有关使用Notifications的示例代码，请参阅[Android Notifications Sample](https://github.com/googlesamples/android-Notifications)  
+请注意，此页面上的代码使用Android支持库中的NotificationCompat API。 这些API允许你添加仅在较新版本的Android上可用的功能，同时仍提供与Android 4.0（API级别14）的兼容性。 但是，某些新功能（例如内联回复操作）导致旧版本无法操作。
+### Add the support library
+尽管使用Android Studio创建的大多数项目都包含使用NotificationCompat所必需的依赖项，但你应验证模块级build.gradle文件是否包含以下依赖项：
+```gradle
+dependencies {
+    implementation "com.android.support:support-compat:28.0.0"
+}
+```
+- Note:  
+ com.android.support组中的其他库也包括support-compat作为传递依赖项。 因此，如果你已经在使用其他支持库API，则可以访问NotificationCompat，而无需上面显示的确切依赖关系。
+
+ ### Create a basic notification
+ Notifications以其最基本，最紧凑的形式（也称为折叠形式）显示图标，标题和少量内容文本。 在本部分中，你将学习如何创建一个Notifications，用户可以单击该Notifications来启动应用程序中的活动。  
+ 要查看notification 每个部分的详情，请看[notification anatomy](https://developer.android.google.cn/guide/topics/ui/notifiers/notifications.html#Templates)
+ #### Set the notification content
+ 首先，你需要使用NotificationCompat.Builder对象设置Notifications的内容和频道。 以下示例显示如何使用以下内容创建Notifications：
+ - 一个small icon,由setSmallIcon（）设置。 这是用户可见内容中必须设置的。
+ - 一个 标题， 通过setContentTitle() 设置
+ - body text, 通过setContentText() 设置
+ - notification 的优先级，通过setPriority() 设置，优先级决定了通知在Android 7.1及更低版本上的介入程度。 （对于Android 8.0及更高版本，你必须改channel importance，如下一节所示。）
+ ```java
+ NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        .setSmallIcon(R.drawable.notification_icon)
+        .setContentTitle(textTitle)
+        .setContentText(textContent)
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+ ```
+ 请注意，NotificationCompat.Builder构造函数要求你提供一个channel ID。 为了与Android 8.0（API级别26）及更高版本兼容，这是必需的，但较早版本会忽略。
+
+ 默认情况下，Notifications的文本内容被截断以适合一行。 如果希望你的Notifications更长，可以通过使用setStyle（）添加样式模板来启用可扩展Notifications。 例如，以下代码创建一个较大的文本区域：
+ ```java
+ NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        .setSmallIcon(R.drawable.notification_icon)
+        .setContentTitle("My notification")
+        .setContentText("Much longer text that cannot fit one line...")
+        .setStyle(new NotificationCompat.BigTextStyle()
+                .bigText("Much longer text that cannot fit one line..."))
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+ ```
+ 有关其他大型Notifications样式的更多信息，包括如何添加图像和媒体播放控件，请参阅[Create a Notification with Expandable Detail](https://developer.android.google.cn/training/notify-user/expanded.html)。
+ #### Create a channel and set the importance
+ 在Android 8.0及更高版本上传递Notifications之前，必须通过将Notification Channel实例传递给createNotificationChannel（）在系统中注册应用程序的Notifications通道。 因此，以下代码被SDK_INT版本上的条件阻止：
+ ```java
+ private void createNotificationChannel() {
+    // Create the NotificationChannel, but only on API 26+ because
+    // the NotificationChannel class is new and not in the support library
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        CharSequence name = getString(R.string.channel_name);
+        String description = getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
+}
+ ```
+ 由于你必须先创建Notifications channel，然后才能在Android 8.0及更高版本上发布任何Notifications，因此你应在应用启动后立即执行此代码。 重复调用此方法是安全的，因为创建现有Notifications channel不会执行任何操作。  
+ 注意，使用NotificationManager类中的常量之一，NotificationChannel构造函数要求 importance。 此参数确定如何中断属于该通道的任何通知的用户-尽管你还必须使用setPriority（）设置优先级以支持Android 7.1及更低版本（如上所示）。 
+ 尽管你必须按照此处所示设置Notifications的importance/priority，但是系统无法保证你将获得警报行为。 在某些情况下，系统可能会基于其他因素更改importance级别，并且用户始终可以重新定义给定channel的 importance级别。  
+ 以下代码片段显示了如何在用户点击Notifications时创建打开活动的基本意图：
+ ```java
+ // Create an explicit intent for an Activity in your app
+Intent intent = new Intent(this, AlertDetails.class);
+intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        .setSmallIcon(R.drawable.notification_icon)
+        .setContentTitle("My notification")
+        .setContentText("Hello World!")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        // Set the intent that will fire when the user taps the notification
+        .setContentIntent(pendingIntent)
+        .setAutoCancel(true);
+ ```
+ 请注意，此代码调用setAutoCancel（），当用户点击Notifications时它将自动删除Notifications。
+
+ 上面显示的setFlags（）方法有助于在用户通过通知打开你的应用程序后保留其预期的导航体验。 但是，是否要使用它取决于你要启动的Activity类型，这可能是以下两种情况之一：
+ - 专为响应Notifications而存在的activity。 用户在正常使用应用程序期间没有理由导航到该activity，因此该activity将启动一个新task，而不是被添加到你应用程序的现有task和back stack中。 这是在上面的示例中创建的意图类型。
+ - 应用的常规应用流程中存在的一项activity。 在这种情况下，启动activity应创建一个back stack，以便保留用户对back和up按钮的期望。  
+ 有关配置通知意图的不同方式的更多信息，请阅读[ Start an Activity from a Notification](https://developer.android.google.cn/training/notify-user/navigation.html)。
+#### Show the notification
+要显示Notifications，请调用NotificationManagerCompat.notify（），并向其传递Notifications的唯一ID和NotificationCompat.Builder.build（）的结果。例如：
+```java
+NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+// notificationId is a unique int for each notification that you must define
+notificationManager.notify(notificationId, builder.build());
+```
+记住要保存传递给NotificationManagerCompat.notify（）的notification ID，因为以后要更新或删除notification时将需要它。
+- Note:  
+从Android 8.1（API级别27）开始，应用程序每秒发出通知的声音不能超过一次。 如果你的应用在一秒钟内发布了多个通知，它们都会按预期显示，但是每秒仅第一个通知会发出声音。
+### Add action buttons
+Notifications最多可以提供三个操作按钮，这些按钮允许用户快速响应，例如暂停提醒，甚至回复短信。 但是，这些操作按钮不应与用户点击Notifications时执行的操作重复。
+
+要添加动作按钮，请将PendingIntent传递给addAction（）方法。 这就像设置Notifications的默认点击操作一样，除了可以启动活动之外，你还可以执行其他各种操作，例如启动在后台执行作业的BroadcastReceiver，这样该操作就不会中断已经打开的应用程序 。
+例如，以下代码显示了如何将broadcast发送到特定的receiver：
+```java
+Intent snoozeIntent = new Intent(this, MyBroadcastReceiver.class);
+snoozeIntent.setAction(ACTION_SNOOZE);
+snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+PendingIntent snoozePendingIntent =
+        PendingIntent.getBroadcast(this, 0, snoozeIntent, 0);
+
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        .setSmallIcon(R.drawable.notification_icon)
+        .setContentTitle("My notification")
+        .setContentText("Hello World!")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setContentIntent(pendingIntent)
+        .addAction(R.drawable.ic_snooze, getString(R.string.snooze),
+                snoozePendingIntent);
+```
+如果要看更多的如何构建一个BroadcastReceiver 来执行background work，请看 [Broadcasts guide](https://developer.android.google.cn/guide/components/broadcasts.html)  
+如果你改为尝试使用媒体播放按钮构建Notifications（例如暂停和跳过曲目），请参阅[create a notification with media controls](https://developer.android.google.cn/training/notify-user/expanded.html#media-style)。
+
+- Note:  
+在Android 10（API级别29）及更高版本中，如果应用程序不提供自己的应用程序，则平台会自动生成通知操作按钮。 如果你不希望应用程序的通知显示任何建议的答复或操作，则可以使用setAllowGeneratedReplies（）和setAllowSystemGeneratedContextualActions（）退出系统生成的答复和操作。
+### Add a direct reply action
+在Android 7.0（API级别24）中引入的直接回复操作使用户可以直接在Notifications中输入文本，该Notifications无需打开activity即可发送到你的应用程序。 例如，你可以使用直接回复操作让用户回复Notifications中的文本消息或更新任务列表。  
+直接答复操作在打开文本输入的Notifications中显示为附加按钮。 用户完成输入后，系统会将文本响应附加到你为Notifications操作指定的意图，并将该意图发送到你的应用程序。
+#### Add the reply button
+创建支持直接回复的Notifications操作
+1. 创建一个RemoteInput.Builder实例，你可以将其添加到Notifications操作中。 此类的构造函数接受一个字符串，系统将该字符串用作文本输入的键。 稍后，你的app将使用该输入的文本。
+```java
+// Key for the string that's delivered in the action's intent.
+private static final String KEY_TEXT_REPLY = "key_text_reply";
+
+String replyLabel = getResources().getString(R.string.reply_label);
+RemoteInput remoteInput = new RemoteInput.Builder(KEY_TEXT_REPLY)
+        .setLabel(replyLabel)
+        .build();
+```
+2. Create a PendingIntent for the reply action
+```
+// Build a PendingIntent for the reply action to trigger.
+PendingIntent replyPendingIntent =
+        PendingIntent.getBroadcast(getApplicationContext(),
+                conversation.getConversationId(),
+                getMessageReplyIntent(conversation.getConversationId()),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+```
+- Caution:  
+如果你重新使用PendingIntent，则用户可能会回复与他们认为自己不同的对话。 你必须为每个对话提供不同的请求代码，或者提供在对任何其他对话的答复Intent调用equals（）时不会返回true的Intent。 会话ID经常作为Intent的Extras捆绑包的一部分传递，但在调用equals（）时将被忽略.
+
+3. 使用addRemoteInput（）将RemoteInput对象附加到动作
+```java
+// Create the reply action and add the remote input.
+NotificationCompat.Action action =
+        new NotificationCompat.Action.Builder(R.drawable.ic_reply_icon,
+                getString(R.string.label), replyPendingIntent)
+                .addRemoteInput(remoteInput)
+                .build();
+```
+4. 将操作应用于Notifications并发出Notifications
+```java
+// Build the notification and add the action.
+Notification newMessageNotification = new Notification.Builder(context, CHANNEL_ID)
+        .setSmallIcon(R.drawable.ic_message)
+        .setContentTitle(getString(R.string.title))
+        .setContentText(getString(R.string.content))
+        .addAction(action)
+        .build();
+
+// Issue the notification.
+NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+notificationManager.notify(notificationId, newMessageNotification);
+```
+#### Retrieve user input from the reply 
+要从通知的答复UI接收用户输入，请调用RemoteInput.getResultsFromIntent（），并将你的BroadcastReceiver接收到的Intent传递给它。
+```java
+private CharSequence getMessageText(Intent intent) {
+    Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+    if (remoteInput != null) {
+        return remoteInput.getCharSequence(KEY_TEXT_REPLY);
+    }
+    return null;
+ }
+```
+处理完文本后，必须通过使用具有相同ID和标记（如果使用）的NotificationManagerCompat.notify（）来更新通知。 这对于隐藏直接答复UI并向用户确认已正确接收并处理了他们的答复是必需的。
+```java
+// Build a new notification, which informs the user that the system
+// handled their interaction with the previous notification.
+Notification repliedNotification = new Notification.Builder(context, CHANNEL_ID)
+        .setSmallIcon(R.drawable.ic_message)
+        .setContentText(getString(R.string.replied))
+        .build();
+
+// Issue the new notification.
+NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+notificationManager.notify(notificationId, repliedNotification);
+```
+使用此新Notifications时，请使用传递给接收者的onReceive（）方法的上下文。  
+
+你还应该通过调用setRemoteInputHistory（）将回复附加到Notifications的底部。 但是，如果你要构建消息传递应用程序，则应创建消息传递样式的Notifications，并将新消息附加到对话中。  
+
+有关来自消息传递应用程序的Notifications的更多建议，请参阅[ best practices for messaging apps](https://developer.android.google.cn/training/notify-user/build-notification?hl=en#messaging-best-practices)。
+
+### Add a progress bar
+Notifications可以包括动画进度指示器，该指示器向用户显示正在进行的操作的状态。
+如果你可以随时估计要完成多少操作，请通过调用setProgress（max，progress，false），使用指标的“确定”形式（如图4所示）。 第一个参数是“ complete”值（例如100）； 第二个是当前完成的数量，最后一个表明这是一个确定的进度栏。  
+随着操作的进行，用更新的进度值连续调用setProgress（max，progress，false），然后重新发出通知。
+```java
+...
+NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+builder.setContentTitle("Picture Download")
+        .setContentText("Download in progress")
+        .setSmallIcon(R.drawable.ic_notification)
+        .setPriority(NotificationCompat.PRIORITY_LOW);
+
+// Issue the initial notification with zero progress
+int PROGRESS_MAX = 100;
+int PROGRESS_CURRENT = 0;
+builder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, false);
+notificationManager.notify(notificationId, builder.build());
+
+// Do the job here that tracks the progress.
+// Usually, this should be in a 
+// worker thread 
+// To show progress, update PROGRESS_CURRENT and update the notification with:
+// builder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, false);
+// notificationManager.notify(notificationId, builder.build());
+
+// When done, update the notification one more time to remove the progress bar
+builder.setContentText("Download complete")
+        .setProgress(0,0,false);
+notificationManager.notify(notificationId, builder.build());
+```
+在操作结束时，进度应等于最大。 你可以保留进度条以显示操作完成的时间，也可以将其删除。 无论哪种情况，都请记住更新通知文本以表明操作已完成。 要删除进度条，请调用setProgress（0，0，false）。
+- Note:  
+由于进度条要求你的应用不断更新Notifications，因此该代码通常应在后台服务中运行。  
+
+要显示不确定的进度条（不表示完成百分比的条），请调用setProgress（0，0，true）。 结果是指示器具有与上面的进度条相同的样式，不同之处在于进度条是不指示完成的连续动画。 进度动画将一直运行，直到你调用setProgress（0，0，false），然后更新Notifications以删除活动指示器。
+
+切记更改Notifications文本以指示操作已完成。
+- Note:  
+如果你确实需要下载文件，则应考虑使用[DownloadManager](https://developer.android.google.cn/reference/android/app/DownloadManager.html)，它会提供自己的通知来跟踪你的下载进度。
+### Set a system-wide category
+当用户启用“请勿打扰”模式时，Android使用一些预定义的系统范围类别来确定是否让Notifications打扰用户  
+如果你的Notifications属于NotificationCompat中定义的预定义Notifications类别之一（例如CATEGORY_ALARM，CATEGORY_REMINDER，CATEGORY_EVENT或CATEGORY_CALL），则应通过将适当的类别传递给setCategory（）来进行声明。
+```java
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        .setSmallIcon(R.drawable.notification_icon)
+        .setContentTitle("My notification")
+        .setContentText("Hello World!")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setCategory(NotificationCompat.CATEGORY_MESSAGE);
+```
+当设备处于“请勿打扰”模式时，系统会使用有关Notifications类别的信息来决定显示Notifications的决策。  
+但是，你不需要设置系统范围的类别，只有在你的Notifications与NotificationCompat中定义的类别之一匹配时，才应设置该类别。
+
+### show an urgent message
+你的应用可能需要显示紧急，时间敏感的消息，例如打来的电话或响铃警报。 在这种情况下，你可以将全屏 Intent 与Notifications相关联。 调用Notifications时，用户将看到以下内容之一，具体取决于设备的锁定状态：
+- 如果用户的设备被锁定，则会出现全屏activity，并覆盖锁定屏幕。
+- 如果用户的设备已解锁，则通知将以展开形式显示，其中包含用于处理或关闭Notification的选项
+
+- Caution:  
+包含全屏Intent的Notifications实质上是侵入性的，因此仅对最紧急，时间敏感的消息使用这种类型的Notifications很重要。
+
+- Note:  
+如果你的应用程序针对Android 10（API级别29）或更高版本，则必须在app的manifest中请求USE_FULL_SCREEN_INTENT权限，以便系统启动与时间敏感的Notifications相关联的全屏活动。  
+
+以下代码段演示了如何将Notifications与全屏Intent相关联：
+```java
+Intent fullScreenIntent = new Intent(this, ImportantActivity.class);
+PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, 0,
+        fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        .setSmallIcon(R.drawable.notification_icon)
+        .setContentTitle("My notification")
+        .setContentText("Hello World!")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setFullScreenIntent(fullScreenPendingIntent, true);
+```
+### Set lock screen visibility
+要控制在锁定屏幕上的Notifications中可见的详细程度，请调用setVisibility（）并指定以下值之一：
+- VISIBILITY_PUBLIC 显示Notifications的全部内容。
+- VISIBILITY_SECRET 不在锁定屏幕上显示此通知的任何部分。
+- VISIBILITY_PRIVATE 显示基本信息，例如通知的图标和内容标题，但隐藏通知的全部内容。
+
+设置VISIBILITY_PRIVATE后，你还可以提供隐藏某些详细信息的Notifications内容的替代版本。 例如，SMS应用程序可能会显示一条Notifications，显示你有3条新短信，但隐藏了消息内容和发件人。 要提供此替代Notifications，请像往常一样先使用NotificationCompat.Builder创建替代Notifications。 然后使用setPublicVersion（）将替代Notifications附加到常规Notifications  
+但是，用户始终可以最终控制他们的Notifications是否在锁定屏幕上可见，甚至可以根据你应用的Notifications渠道进行控制。
+
+### Update a notification 
+要在发出Notifications后更新此Notifications，请再次调用NotificationManagerCompat.notify()，并向其传递与你以前使用的ID相同的Notifications。 如果先前的Notifications已被取消，则会创建一个新的Notifications。  
+你可以选择调用setOnlyAlertOnce（），以便你的notification仅在第一次出现时才中断用户（具有声音，振动或视觉提示），而不会在以后进行更新。
+- Caution:  
+Android在更新Notifications时应用速率限制。 如果你过于频繁地发布更新Notifications（许多时间少于一秒钟），则系统可能会丢弃某些更新。
+
+### Remove a notification
+Notifications保持可见，直到发生以下情况之一：  
+- 用户关闭该Notifications。
+- 用户单击Notifications，然后在创建Notifications时调用setAutoCancel（）。
+- 你为特定的Notification ID调用cancel（）。 此方法还删除正在进行的Notifications。
+- 你调用cancelAll（），它将删除你先前发出的所有Notifications .  
+
+如果使用setTimeoutAfter（）创建Notifications时设置了超时，则系统会在经过指定的持续时间后取消Notifications。 如果需要，你可以在指定的超时时间过去之前取消Notifications。
+
+### Best practices for messaging apps
+使用此处列出的最佳实践作为为你的消息传递和聊天应用程序创建Notifications时要记住的事项的快速参考。
+#### Use MessagingStyle
+从Android 7.0（API级别24）开始，Android提供了专门用于消息传递内容的Notifications样式模板。 使用NotificationCompat.MessagingStyle类，可以更改Notifications上显示的多个标签，包括对话标题，其他消息以及Notifications的内容视图。  
+以下代码段演示了如何使用MessagingStyle类自定义Notifications的样式。
+```java
+Notification notification = new Notification.Builder(this, CHANNEL_ID)
+        .setStyle(new NotificationCompat.MessagingStyle("Me")
+                .setConversationTitle("Team lunch")
+                .addMessage("Hi", timestamp1, null) // Pass in null for user.
+                .addMessage("What's up?", timestamp2, "Coworker")
+                .addMessage("Not much", timestamp3, null)
+                .addMessage("How about lunch?", timestamp4, "Coworker"))
+        .build();
+```
+从Android 8.0（API级别26）开始，使用NotificationCompat.MessagingStyle类的Notifications以折叠形式显示更多内容。 你还可以使用addHistoricMessage（）方法，通过将历史消息添加到与消息相关的Notifications中来为对话提供上下文。  
+当使用 NotificationCompat.MessagingStyle 的时候： 
+- 调用MessagingStyle.setConversationTitle（）为两个以上的人设置群聊标题。 好的对话标题可能是群聊的名称，或者，如果没有特定名称，则可能是对话参与者的列表。 否则，该消息可能会被误认为是与该会话中最新消息的发送者进行的一对一对话。
+- 使用MessagingStyle.setData（）方法可包含媒体消息，例如图像。 当前支持模式为image / *的MIME类型。
+#### Use direct reply
+直接回复允许用户内联回复消息。 
+- 用户使用内联回复操作进行回复后，请使用MessagingStyle.addMessage（）更新MessagingStyle Notification，并且不要撤消或取消该Notification。 不取消通知将允许用户从Notification中发送多个答复。
+- 要使内联回复操作与Wear OS兼容，请调用Action.WearableExtender.setHintDisplayInlineAction（true）。
+- 通过将历史消息添加到Notification中，可以使用addHistoricMessage（）方法为直接回复对话提供上下文。
+#### Enable smart reply
+要启用智能回复，请在回复操作上调用setAllowGeneratedResponses（true）。 当Notifications桥接到Wear OS设备时，这将使用户可以使用智能回复响应。 智能回复响应是由一个完全值班的机器学习模型使用NotificationCompat.MessagingStyleNotifications提供的上下文生成的，并且没有数据上载到Internet来生成响应。
+#### Add notification metadata
+分配Notifications元数据，以告诉系统设备处于“请勿打扰”模式时如何处理您的应用程序Notifications。 例如，使用addPerson（）或setCategory（Notification.CATEGORY_MESSAGE）方法覆盖“请勿打扰”模式。

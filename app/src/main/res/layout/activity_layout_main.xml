@@ -14,4 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Relative Layout" />
+
+    <Button
+        android:id="@+id/goToFrameLayoutBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Frame Layout" />
 </LinearLayout>

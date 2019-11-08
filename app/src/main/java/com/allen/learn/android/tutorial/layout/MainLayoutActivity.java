@@ -13,6 +13,8 @@ public class MainLayoutActivity extends AppCompatActivity {
 
     private Button toToLinearLayoutBtn;
     private Button toToRelativeLayoutBtn;
+    private Button goToFrameLayoutBtn;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +30,12 @@ public class MainLayoutActivity extends AppCompatActivity {
         toToRelativeLayoutBtn = findViewById(R.id.goToRelativeLayoutBtn);
         toToRelativeLayoutBtn.setOnClickListener(v->{
             Intent intent = new Intent(MainLayoutActivity.this, RelativeLayoutActivity.class);
+            startActivity(intent);
+        });
+
+        goToFrameLayoutBtn = findViewById(R.id.goToFrameLayoutBtn);
+        goToFrameLayoutBtn.setOnClickListener(v->{
+            Intent intent = new Intent(MainLayoutActivity.this, FrameLayoutActivity.class);
             startActivity(intent);
         });
     }
