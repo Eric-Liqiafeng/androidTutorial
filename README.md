@@ -3044,7 +3044,7 @@ PendingIntent replyPendingIntent =
                 PendingIntent.FLAG_UPDATE_CURRENT);
 ```
 - Caution:  
-如果你重新使用PendingIntent，则用户可能会回复与他们认为自己不同的对话。 你必须为每个对话提供不同的请求代码，或者提供在对任何其他对话的答复Intent调用equals（）时不会返回true的Intent。 会话ID经常作为Intent的Extras捆绑包的一部分传递，但在调用equals（）时将被忽略.
+如果你重新使用PendingIntent，则用户可能会认为自己在回复不同的对话。 你必须为每个对话提供不同的请求代码，或者提供在对任何其他对话的答复Intent调用equals（）时不会返回true的Intent。 会话ID经常作为Intent的Extras捆绑包的一部分传递，但在调用equals（）时将被忽略.
 
 3. 使用addRemoteInput（）将RemoteInput对象附加到动作
 ```java
@@ -3228,4 +3228,4 @@ Notification notification = new Notification.Builder(this, CHANNEL_ID)
 #### Enable smart reply
 要启用智能回复，请在回复操作上调用setAllowGeneratedResponses（true）。 当Notifications桥接到Wear OS设备时，这将使用户可以使用智能回复响应。 智能回复响应是由一个完全值班的机器学习模型使用NotificationCompat.MessagingStyleNotifications提供的上下文生成的，并且没有数据上载到Internet来生成响应。
 #### Add notification metadata
-分配Notifications元数据，以告诉系统设备处于“请勿打扰”模式时如何处理您的应用程序Notifications。 例如，使用addPerson（）或setCategory（Notification.CATEGORY_MESSAGE）方法覆盖“请勿打扰”模式。
+分配Notifications元数据，以告诉系统设备处于“请勿打扰”模式时如何处理你的应用程序Notifications。 例如，使用addPerson（）或setCategory（Notification.CATEGORY_MESSAGE）方法覆盖“请勿打扰”模式。
