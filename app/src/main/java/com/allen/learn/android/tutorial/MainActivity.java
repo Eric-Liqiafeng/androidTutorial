@@ -13,8 +13,10 @@ import com.allen.learn.android.tutorial.activity.ActivityMainActivity;
 import com.allen.learn.android.tutorial.broadcast.MyLocalBroadcastReceiver;
 import com.allen.learn.android.tutorial.broadcast.SendLocalBroadcastActivity;
 import com.allen.learn.android.tutorial.layout.MainLayoutActivity;
+import com.allen.learn.android.tutorial.notification.NotificationActivity;
 import com.allen.learn.android.tutorial.service.ServiceMainActivity;
 import com.allen.learn.android.tutorial.util.Constant;
+import com.allen.learn.android.tutorial.view.SimpleWidgetActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private Button gotToServiceBtn;
     private Button gotToBroadcastBtn;
     private Button goToLayoutBtn;
+    private Button goToNotificationBtn;
+    private Button goToSimpleWidgetBtn;
 
     private MyLocalBroadcastReceiver myLocalBroadcastReceiver;
 
@@ -65,6 +69,18 @@ public class MainActivity extends AppCompatActivity {
         goToLayoutBtn = findViewById(R.id.goToLayoutBtn);
         goToLayoutBtn.setOnClickListener(v->{
             Intent intent = new Intent(MainActivity.this, MainLayoutActivity.class);
+            startActivity(intent);
+        });
+
+        goToNotificationBtn = findViewById(R.id.goToNotificationBtn);
+        goToNotificationBtn.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+            startActivity(intent);
+        });
+
+        goToSimpleWidgetBtn = findViewById(R.id.goToSimpleWidgetBtn);
+        goToSimpleWidgetBtn.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, SimpleWidgetActivity.class);
             startActivity(intent);
         });
 

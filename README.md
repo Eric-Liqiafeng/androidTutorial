@@ -3044,7 +3044,7 @@ PendingIntent replyPendingIntent =
                 PendingIntent.FLAG_UPDATE_CURRENT);
 ```
 - Caution:  
-如果你重新使用PendingIntent，则用户可能会认为自己在回复不同的对话。 你必须为每个对话提供不同的请求代码，或者提供在对任何其他对话的答复Intent调用equals（）时不会返回true的Intent。 会话ID经常作为Intent的Extras捆绑包的一部分传递，但在调用equals（）时将被忽略.
+如果你重新使用PendingIntent，则用户可能会认为自己在回复不同的对话。 你必须为每个对话提供不同的request code，或者提供在对任何其他对话的答复Intent调用equals（）时不会返回true的Intent。 会话ID经常作为Intent的Extras捆绑包的一部分传递，但在调用equals（）时将被忽略.
 
 3. 使用addRemoteInput（）将RemoteInput对象附加到动作
 ```java

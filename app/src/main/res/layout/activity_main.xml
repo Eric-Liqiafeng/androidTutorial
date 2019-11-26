@@ -33,6 +33,18 @@
         android:layout_height="wrap_content"
         android:text="Layout" />
 
+    <Button
+        android:id="@+id/goToNotificationBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notification" />
+
+    <Button
+        android:id="@+id/goToSimpleWidgetBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simple Widget" />
+
 <!--    <FrameLayout-->
 <!--        android:id="@+id/container"-->
 <!--        android:layout_width="match_parent"-->

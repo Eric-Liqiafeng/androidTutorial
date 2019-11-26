@@ -50,6 +50,8 @@
         <activity android:name=".layout.LinearLayoutActivity"></activity>
         <activity android:name=".layout.RelativeLayoutActivity"></activity>
         <activity android:name=".layout.FrameLayoutActivity"></activity>
+        <activity android:name=".notification.NotificationActivity"></activity>
+        <activity android:name=".view.SimpleWidgetActivity"></activity>
 
         <service android:name=".service.MyForegroundMusicService"
             android:enabled="true" android:exported="true"/>
@@ -63,6 +65,18 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <receiver android:name=".broadcast.MyBroadcastReceiver"  android:exported="true">
+            <intent-filter>
+                <action android:name="allen.notification.test"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".broadcast.MyReplyBroadcastReceiver"  android:exported="true">
+            <intent-filter>
+                <action android:name="allen.notification.reply"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 
