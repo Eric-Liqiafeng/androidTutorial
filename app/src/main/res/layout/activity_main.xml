@@ -45,6 +45,18 @@
         android:layout_height="wrap_content"
         android:text="Simple Widget" />
 
+    <Button
+        android:id="@+id/goToListViewBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="List View" />
+
+    <Button
+        android:id="@+id/goToRecyclerViewBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Recycler View" />
+
 <!--    <FrameLayout-->
 <!--        android:id="@+id/container"-->
 <!--        android:layout_width="match_parent"-->

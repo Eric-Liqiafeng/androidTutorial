@@ -16,7 +16,9 @@ import com.allen.learn.android.tutorial.layout.MainLayoutActivity;
 import com.allen.learn.android.tutorial.notification.NotificationActivity;
 import com.allen.learn.android.tutorial.service.ServiceMainActivity;
 import com.allen.learn.android.tutorial.util.Constant;
+import com.allen.learn.android.tutorial.view.adapater.widget.ListViewActivity;
 import com.allen.learn.android.tutorial.view.SimpleWidgetActivity;
+import com.allen.learn.android.tutorial.view.adapater.widget.RecyclerViewActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private Button goToNotificationBtn;
     private Button goToSimpleWidgetBtn;
 
+    private Button goToListViewBtn;
+    private Button goToRecyclerViewBtn;
     private MyLocalBroadcastReceiver myLocalBroadcastReceiver;
 
     @Override
@@ -81,6 +85,18 @@ public class MainActivity extends AppCompatActivity {
         goToSimpleWidgetBtn = findViewById(R.id.goToSimpleWidgetBtn);
         goToSimpleWidgetBtn.setOnClickListener(v->{
             Intent intent = new Intent(MainActivity.this, SimpleWidgetActivity.class);
+            startActivity(intent);
+        });
+
+        goToListViewBtn = findViewById(R.id.goToListViewBtn);
+        goToListViewBtn.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, ListViewActivity.class);
+            startActivity(intent);
+        });
+
+        goToRecyclerViewBtn = findViewById(R.id.goToRecyclerViewBtn);
+        goToRecyclerViewBtn.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, RecyclerViewActivity.class);
             startActivity(intent);
         });
 

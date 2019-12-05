@@ -52,6 +52,8 @@
         <activity android:name=".layout.FrameLayoutActivity"></activity>
         <activity android:name=".notification.NotificationActivity"></activity>
         <activity android:name=".view.SimpleWidgetActivity"></activity>
+        <activity android:name=".view.adapater.widget.ListViewActivity"></activity>
+        <activity android:name=".view.adapater.widget.RecyclerViewActivity"></activity>
 
         <service android:name=".service.MyForegroundMusicService"
             android:enabled="true" android:exported="true"/>
