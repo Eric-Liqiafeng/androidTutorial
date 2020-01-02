@@ -12,7 +12,7 @@ import com.allen.learn.android.tutorial.R;
 
 import java.util.List;
 
-public class      AnimalAdapter extends BaseAdapter {
+public class AnimalAdapter extends BaseAdapter {
 
     private Context context;
     private List<Animal> dataList;

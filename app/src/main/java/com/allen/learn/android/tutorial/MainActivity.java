@@ -19,6 +19,7 @@ import com.allen.learn.android.tutorial.util.Constant;
 import com.allen.learn.android.tutorial.view.adapater.widget.ListViewActivity;
 import com.allen.learn.android.tutorial.view.SimpleWidgetActivity;
 import com.allen.learn.android.tutorial.view.adapater.widget.RecyclerViewActivity;
+import com.allen.learn.android.tutorial.view.adapater.widget.TabLayoutActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Button goToListViewBtn;
     private Button goToRecyclerViewBtn;
+    private Button goToTabLayoutBtn;
     private MyLocalBroadcastReceiver myLocalBroadcastReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
         goToRecyclerViewBtn = findViewById(R.id.goToRecyclerViewBtn);
         goToRecyclerViewBtn.setOnClickListener(v->{
             Intent intent = new Intent(MainActivity.this, RecyclerViewActivity.class);
+            startActivity(intent);
+        });
+
+        goToTabLayoutBtn = findViewById(R.id.goToTabLayoutBtn);
+        goToTabLayoutBtn.setOnClickListener(v->{
+            Intent intent = new Intent(MainActivity.this, TabLayoutActivity.class);
             startActivity(intent);
         });
 
